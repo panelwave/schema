@@ -525,8 +525,7 @@
          },
          "required":[
             "id"
-         ],
-         "additionalProperties":false
+         ]
       },
       "ImageVariant":{
          "type":"object",
@@ -724,7 +723,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AssetCatalogItemAudio":{
          "allOf":[
@@ -762,7 +762,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AssetCatalogItemVideo":{
          "allOf":[
@@ -789,7 +790,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AssetCatalogItemSubtitle":{
          "allOf":[
@@ -816,7 +818,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AssetCatalogItemVector":{
          "allOf":[
@@ -843,7 +846,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AssetCatalogItemJson":{
          "allOf":[
@@ -870,7 +874,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AssetCatalogItemPluginPayload":{
          "allOf":[
@@ -897,7 +902,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "Variables":{
          "type":"object",
@@ -1732,7 +1738,6 @@
             },
             {
                "type":"object",
-               "additionalProperties":false,
                "required":[
                   "kind",
                   "assetId"
@@ -1750,7 +1755,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "VectorLayer":{
          "allOf":[
@@ -1759,7 +1765,6 @@
             },
             {
                "type":"object",
-               "additionalProperties":false,
                "required":[
                   "kind",
                   "assetId"
@@ -1774,7 +1779,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "VideoLayer":{
          "allOf":[
@@ -1783,7 +1789,6 @@
             },
             {
                "type":"object",
-               "additionalProperties":false,
                "required":[
                   "kind",
                   "assetId"
@@ -1814,7 +1819,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AudioLayer":{
          "allOf":[
@@ -1823,7 +1829,6 @@
             },
             {
                "type":"object",
-               "additionalProperties":false,
                "required":[
                   "kind",
                   "assetId"
@@ -1852,7 +1857,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "TextLayer":{
          "allOf":[
@@ -1861,7 +1867,6 @@
             },
             {
                "type":"object",
-               "additionalProperties":false,
                "required":[
                   "kind",
                   "text"
@@ -1901,7 +1906,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "PluginLayer":{
          "allOf":[
@@ -1910,7 +1916,6 @@
             },
             {
                "type":"object",
-               "additionalProperties":false,
                "required":[
                   "kind",
                   "plugin"
@@ -1925,7 +1930,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "AudioTrack":{
          "type":"object",

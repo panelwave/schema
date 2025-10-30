@@ -2494,7 +2494,6 @@
       },
       "ExtraBlock":{
          "type":"object",
-         "additionalProperties":false,
          "properties":{
             "id":{
                "$ref":"#/$defs/Identifier"
@@ -2558,7 +2557,8 @@
                   }
                }
             }
-         ]
+         ],
+         "unevaluatedProperties":false
       },
       "Paywall":{
          "type":"object",
@@ -2597,18 +2597,7 @@
                "$ref":"#/$defs/Identifier"
             },
             "requireEntitlement":{
-               "oneOf":[
-                  {
-                     "type":"string",
-                     "enum":[
-                        "premium",
-                        "token"
-                     ]
-                  },
-                  {
-                     "type":"string"
-                  }
-               ]
+               "type":"string"
             },
             "previewPanels":{
                "type":"integer",

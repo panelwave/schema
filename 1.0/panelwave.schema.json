@@ -1373,6 +1373,30 @@
                               "description":"Y origin (0 = top, 0.5 = center, 1 = bottom)"
                            }
                         }
+                     },
+                     "vx":{
+                        "type":"number",
+                        "minimum":0,
+                        "maximum":1,
+                        "description":"Visible area X position relative to panel (normalized: 0 = left edge, 1 = right edge). If omitted, full panel is visible."
+                     },
+                     "vy":{
+                        "type":"number",
+                        "minimum":0,
+                        "maximum":1,
+                        "description":"Visible area Y position relative to panel (normalized: 0 = top edge, 1 = bottom edge). If omitted, full panel is visible."
+                     },
+                     "vw":{
+                        "type":"number",
+                        "minimum":0.001,
+                        "maximum":1,
+                        "description":"Visible area width (normalized: 0-1 = 0-100% of panel width). If omitted, full panel width is visible."
+                     },
+                     "vh":{
+                        "type":"number",
+                        "minimum":0.001,
+                        "maximum":1,
+                        "description":"Visible area height (normalized: 0-1 = 0-100% of panel height). If omitted, full panel height is visible."
                      }
                   }
                }
@@ -1752,6 +1776,10 @@
                   },
                   "clipRect":{
                      "$ref":"#/$defs/NormalizedRect"
+                  },
+                  "visibleRect":{
+                     "$ref":"#/$defs/NormalizedRect",
+                     "description":"Defines the visible area of the image layer. If omitted, the full layer is visible. Hidden areas are rendered at reduced opacity in the editor."
                   }
                }
             }

@@ -1205,6 +1205,14 @@
                   "$ref":"#/$defs/Identifier"
                }
             },
+            "sequenceAudioTracks":{
+               "type":"array",
+               "description":"Audio tracks that span multiple panels within this chapter",
+               "items":{
+                  "$ref":"#/$defs/SequenceAudioTrack"
+               },
+               "uniqueItems":true
+            },
             "graph":{
                "$ref":"#/$defs/Graph"
             }
@@ -1980,7 +1988,8 @@
                   "sfx",
                   "ui",
                   "none"
-               ]
+               ],
+               "default":"none"
             },
             "loop":{
                "type":"boolean",
@@ -1992,8 +2001,117 @@
                "maximum":2,
                "default":1
             },
+            "startAtMs":{
+               "type":"integer",
+               "minimum":0
+            },
             "visibleIf":{
                "$ref":"#/$defs/JsonLogic"
+            }
+         }
+      },
+      "SequenceAudioTrack":{
+         "type":"object",
+         "description":"Audio track that spans multiple panels within a chapter",
+         "additionalProperties":false,
+         "required":[
+            "id",
+            "friendlyId",
+            "assetId",
+            "role",
+            "startTime",
+            "duration"
+         ],
+         "properties":{
+            "id":{
+               "$ref":"#/$defs/Identifier",
+               "description":"Unique identifier for this audio track"
+            },
+            "friendlyId":{
+               "$ref":"#/$defs/Identifier",
+               "description":"Human-readable identifier"
+            },
+            "name":{
+               "type":"string",
+               "maxLength":500,
+               "description":"Display name for the track"
+            },
+            "assetId":{
+               "$ref":"#/$defs/Identifier",
+               "description":"Reference to audio asset"
+            },
+            "role":{
+               "type":"string",
+               "enum":[
+                  "ambient",
+                  "music",
+                  "voiceover",
+                  "sfx"
+               ],
+               "description":"Role/category of the audio track"
+            },
+            "format":{
+               "type":"string",
+               "description":"Optional format filter (null = applies to all formats)",
+               "enum":[
+                  "tablet-portrait",
+                  "mobile-portrait",
+                  "bigscreen-landscape"
+               ]
+            },
+            "startTime":{
+               "type":"integer",
+               "minimum":0,
+               "description":"Start time in milliseconds relative to chapter/sequence start"
+            },
+            "duration":{
+               "type":"integer",
+               "minimum":0,
+               "description":"Duration in milliseconds"
+            },
+            "volume":{
+               "type":"number",
+               "minimum":0,
+               "maximum":2,
+               "default":1,
+               "description":"Volume/gain level (0.0 = silent, 1.0 = normal, 2.0 = double)"
+            },
+            "loop":{
+               "type":"boolean",
+               "default":false,
+               "description":"Whether the track should loop"
+            },
+            "fadeIn":{
+               "type":"integer",
+               "minimum":0,
+               "default":0,
+               "description":"Fade-in duration in milliseconds"
+            },
+            "fadeOut":{
+               "type":"integer",
+               "minimum":0,
+               "default":0,
+               "description":"Fade-out duration in milliseconds"
+            },
+            "playbackRate":{
+               "type":"number",
+               "minimum":0.25,
+               "maximum":4,
+               "default":1,
+               "description":"Playback speed multiplier"
+            },
+            "muted":{
+               "type":"boolean",
+               "default":false,
+               "description":"Whether the track is muted"
+            },
+            "startPanelId":{
+               "$ref":"#/$defs/Identifier",
+               "description":"Optional explicit panel range start"
+            },
+            "endPanelId":{
+               "$ref":"#/$defs/Identifier",
+               "description":"Optional explicit panel range end"
             }
          }
       },

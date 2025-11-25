@@ -384,6 +384,14 @@
                      }
                   }
                }
+            },
+            "copyright":{
+               "type":"string",
+               "description":"Copyright notice for the work"
+            },
+            "license":{
+               "type":"string",
+               "description":"License information for the work"
             }
          }
       },
@@ -1062,6 +1070,82 @@
          "type":"object",
          "additionalProperties":false,
          "properties":{
+            "typography":{
+               "type":"object",
+               "additionalProperties":false,
+               "description":"Global typography and styling defaults for the work",
+               "properties":{
+                  "default_font":{
+                     "type":"string",
+                     "default":"Roboto",
+                     "description":"Default font family for text"
+                  },
+                  "default_font_size":{
+                     "type":"integer",
+                     "minimum":8,
+                     "maximum":72,
+                     "default":14,
+                     "description":"Default font size in points"
+                  },
+                  "default_page_bg_color":{
+                     "$ref":"#/$defs/ColorHex",
+                     "description":"Default background color for pages"
+                  },
+                  "speech_bubble_style":{
+                     "type":"object",
+                     "additionalProperties":false,
+                     "description":"Default styling for speech bubbles",
+                     "properties":{
+                        "shape":{
+                           "type":"string",
+                           "enum":["ellipse", "rectangle", "rounded", "cloud", "thought"],
+                           "default":"ellipse"
+                        },
+                        "tail_style":{
+                           "type":"string",
+                           "enum":["curved", "straight", "none"],
+                           "default":"curved"
+                        },
+                        "border_thickness":{
+                           "type":"integer",
+                           "minimum":0,
+                           "maximum":10,
+                           "default":2,
+                           "description":"Border thickness in pixels"
+                        }
+                     }
+                  },
+                  "panel_border_style":{
+                     "type":"object",
+                     "additionalProperties":false,
+                     "description":"Default styling for panel borders",
+                     "properties":{
+                        "color":{
+                           "$ref":"#/$defs/ColorHex"
+                        },
+                        "thickness":{
+                           "type":"integer",
+                           "minimum":0,
+                           "maximum":10,
+                           "default":1,
+                           "description":"Border thickness in pixels"
+                        },
+                        "style":{
+                           "type":"string",
+                           "enum":["solid", "dashed", "dotted", "none"],
+                           "default":"solid"
+                        }
+                     }
+                  },
+                  "gutter_width":{
+                     "type":"integer",
+                     "minimum":0,
+                     "maximum":50,
+                     "default":10,
+                     "description":"Space between panels in pixels"
+                  }
+               }
+            },
             "ui":{
                "type":"object",
                "additionalProperties":false,
@@ -1241,6 +1325,77 @@
                   "$ref":"#/$defs/Identifier"
                },
                "uniqueItems":true
+            },
+            "visual":{
+               "type":"object",
+               "additionalProperties":false,
+               "description":"Visual properties for the page",
+               "properties":{
+                  "background_color":{
+                     "$ref":"#/$defs/ColorHex",
+                     "description":"Background color for the page"
+                  },
+                  "background_image":{
+                     "oneOf":[
+                        {"$ref":"#/$defs/Identifier"},
+                        {"$ref":"#/$defs/Uri"}
+                     ],
+                     "description":"Background image asset ID or URI"
+                  },
+                  "background_texture":{
+                     "oneOf":[
+                        {"$ref":"#/$defs/Identifier"},
+                        {"$ref":"#/$defs/Uri"}
+                     ],
+                     "description":"Background texture asset ID or URI"
+                  },
+                  "margins":{
+                     "type":"object",
+                     "additionalProperties":false,
+                     "description":"Page margins in pixels",
+                     "properties":{
+                        "top":{
+                           "type":"integer",
+                           "minimum":0,
+                           "maximum":100,
+                           "default":0
+                        },
+                        "right":{
+                           "type":"integer",
+                           "minimum":0,
+                           "maximum":100,
+                           "default":0
+                        },
+                        "bottom":{
+                           "type":"integer",
+                           "minimum":0,
+                           "maximum":100,
+                           "default":0
+                        },
+                        "left":{
+                           "type":"integer",
+                           "minimum":0,
+                           "maximum":100,
+                           "default":0
+                        }
+                     }
+                  }
+               }
+            },
+            "transitions":{
+               "type":"object",
+               "additionalProperties":false,
+               "description":"Transition effects for entering and leaving this page",
+               "properties":{
+                  "in":{
+                     "$ref":"#/$defs/Transition",
+                     "description":"Transition effect when entering this page"
+                  },
+                  "out":{
+                     "$ref":"#/$defs/Transition",
+                     "description":"Transition effect when leaving this page"
+                  }
+               }
             }
          }
       },

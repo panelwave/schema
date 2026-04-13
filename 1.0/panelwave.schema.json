@@ -2323,6 +2323,13 @@
                "default":120,
                "description":"Maximum balloon width in pixels (balloon auto-sizes to text)"
             },
+            "maxHeight":{
+               "type":"number",
+               "minimum":30,
+               "maximum":600,
+               "default":80,
+               "description":"Maximum balloon height in pixels"
+            },
             "fontFamily":{
                "type":"string",
                "default":"'Ames Italic', sans-serif",
@@ -2393,6 +2400,11 @@
                "type":"number",
                "minimum":40,
                "maximum":800
+            },
+            "maxHeight":{
+               "type":"number",
+               "minimum":30,
+               "maximum":600
             },
             "fontFamily":{
                "type":"string"

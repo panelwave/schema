@@ -433,6 +433,10 @@
                      "type":"string"
                   }
                }
+            },
+            "balloonConfig":{
+               "$ref":"#/$defs/BalloonConfigOverride",
+               "description":"Per-character balloon style overrides (merged onto work-level defaults)"
             }
          }
       },
@@ -1091,29 +1095,9 @@
                      "$ref":"#/$defs/ColorHex",
                      "description":"Default background color for pages"
                   },
-                  "speech_bubble_style":{
-                     "type":"object",
-                     "additionalProperties":false,
-                     "description":"Default styling for speech bubbles",
-                     "properties":{
-                        "shape":{
-                           "type":"string",
-                           "enum":["ellipse", "rectangle", "rounded", "cloud", "thought"],
-                           "default":"ellipse"
-                        },
-                        "tail_style":{
-                           "type":"string",
-                           "enum":["curved", "straight", "none"],
-                           "default":"curved"
-                        },
-                        "border_thickness":{
-                           "type":"integer",
-                           "minimum":0,
-                           "maximum":10,
-                           "default":2,
-                           "description":"Border thickness in pixels"
-                        }
-                     }
+                  "balloon_config":{
+                     "$ref":"#/$defs/BalloonConfig",
+                     "description":"Default balloon styling for all speech bubbles in this work"
                   },
                   "panel_border_style":{
                      "type":"object",
@@ -2294,48 +2278,258 @@
             "shape":{
                "$ref":"#/$defs/Shape"
             },
-            "tail":{
-               "$ref":"#/$defs/Tail"
-            },
-            "style":{
-               "$ref":"#/$defs/BubbleStyle"
+            "balloonConfig":{
+               "$ref":"#/$defs/BalloonConfigOverride",
+               "description":"Per-bubble balloon style overrides (merged onto character or work-level defaults)"
             },
             "visibleIf":{
                "$ref":"#/$defs/JsonLogic"
             }
          }
       },
-      "BubbleStyle":{
+      "BalloonConfig":{
+         "title":"Balloon Configuration",
+         "description":"Complete balloon styling configuration. Used at work level as defaults.",
          "type":"object",
          "additionalProperties":false,
          "properties":{
-            "font":{
+            "balloonType":{
+               "type":"string",
+               "enum":[
+                  "normal",
+                  "rectangle",
+                  "cutTop",
+                  "cutTopRight",
+                  "cutTopLeft",
+                  "thought",
+                  "shout",
+                  "whisper",
+                  "connector"
+               ],
+               "default":"normal",
+               "description":"Visual type of the balloon shape"
+            },
+            "cornerRadius":{
+               "type":"number",
+               "minimum":0,
+               "maximum":1,
+               "default":0.5,
+               "description":"Shape roundness (0 = rectangle, 1 = ellipse)"
+            },
+            "maxWidth":{
+               "type":"number",
+               "minimum":40,
+               "maximum":800,
+               "default":120,
+               "description":"Maximum balloon width in pixels (balloon auto-sizes to text)"
+            },
+            "fontFamily":{
+               "type":"string",
+               "default":"'Ames Italic', sans-serif",
+               "description":"CSS font-family for balloon text"
+            },
+            "fontSize":{
+               "type":"number",
+               "minimum":4,
+               "maximum":200,
+               "default":12,
+               "description":"Font size in pixels"
+            },
+            "strokeWidth":{
+               "type":"number",
+               "minimum":0,
+               "maximum":20,
+               "default":2,
+               "description":"Balloon border stroke width in pixels"
+            },
+            "strokeColor":{
+               "type":"string",
+               "pattern":"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+               "default":"#000000",
+               "description":"Balloon border stroke color (CSS hex)"
+            },
+            "fillColor":{
+               "type":"string",
+               "pattern":"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+               "default":"#ffffff",
+               "description":"Balloon fill/background color (CSS hex)"
+            },
+            "tail":{
+               "$ref":"#/$defs/TailConfig",
+               "description":"Tail configuration (pointer from balloon to speaker)"
+            },
+            "hideBorder":{
+               "$ref":"#/$defs/HideBorderConfig",
+               "description":"Border hiding segment for layered balloon effects"
+            }
+         }
+      },
+      "BalloonConfigOverride":{
+         "title":"Balloon Configuration Override",
+         "description":"Partial balloon styling for character-level or bubble-level overrides. Only specified fields override the parent defaults.",
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "balloonType":{
+               "type":"string",
+               "enum":[
+                  "normal",
+                  "rectangle",
+                  "cutTop",
+                  "cutTopRight",
+                  "cutTopLeft",
+                  "thought",
+                  "shout",
+                  "whisper",
+                  "connector"
+               ]
+            },
+            "cornerRadius":{
+               "type":"number",
+               "minimum":0,
+               "maximum":1
+            },
+            "maxWidth":{
+               "type":"number",
+               "minimum":40,
+               "maximum":800
+            },
+            "fontFamily":{
                "type":"string"
             },
-            "sizePt":{
+            "fontSize":{
                "type":"number",
                "minimum":4,
                "maximum":200
-            },
-            "bubbleColor":{
-               "$ref":"#/$defs/ColorHex"
-            },
-            "strokeColor":{
-               "$ref":"#/$defs/ColorHex"
             },
             "strokeWidth":{
                "type":"number",
                "minimum":0,
                "maximum":20
+            },
+            "strokeColor":{
+               "type":"string",
+               "pattern":"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+            },
+            "fillColor":{
+               "type":"string",
+               "pattern":"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+            },
+            "tail":{
+               "type":"object",
+               "additionalProperties":false,
+               "description":"Partial tail overrides",
+               "properties":{
+                  "enabled":{
+                     "type":"boolean"
+                  },
+                  "position":{
+                     "type":"number",
+                     "minimum":0,
+                     "maximum":359
+                  },
+                  "length":{
+                     "type":"number",
+                     "minimum":0,
+                     "maximum":500
+                  },
+                  "curve":{
+                     "type":"string",
+                     "enum":["straight", "left", "right"]
+                  },
+                  "curveAmount":{
+                     "type":"number",
+                     "minimum":0,
+                     "maximum":1
+                  }
+               }
+            },
+            "hideBorder":{
+               "type":"object",
+               "additionalProperties":false,
+               "description":"Partial hide-border overrides",
+               "properties":{
+                  "enabled":{
+                     "type":"boolean"
+                  },
+                  "angle":{
+                     "type":"number",
+                     "minimum":0,
+                     "maximum":359
+                  },
+                  "arc":{
+                     "type":"number",
+                     "minimum":10,
+                     "maximum":180
+                  }
+               }
             }
          }
       },
-      "Tail":{
+      "TailConfig":{
+         "title":"Tail Configuration",
+         "description":"Balloon tail (pointer) configuration",
          "type":"object",
          "additionalProperties":false,
          "properties":{
-            "anchor":{
-               "$ref":"#/$defs/NormalizedPoint"
+            "enabled":{
+               "type":"boolean",
+               "default":true,
+               "description":"Whether the tail is visible"
+            },
+            "position":{
+               "type":"number",
+               "minimum":0,
+               "maximum":359,
+               "default":180,
+               "description":"Tail direction in degrees (compass: 0=top, 90=right, 180=bottom, 270=left)"
+            },
+            "length":{
+               "type":"number",
+               "minimum":0,
+               "maximum":500,
+               "default":45,
+               "description":"Tail length in pixels"
+            },
+            "curve":{
+               "type":"string",
+               "enum":["straight", "left", "right"],
+               "default":"straight",
+               "description":"Tail curve direction"
+            },
+            "curveAmount":{
+               "type":"number",
+               "minimum":0,
+               "maximum":1,
+               "default":0.4,
+               "description":"Curve intensity (0 = straight, 1 = maximum curve)"
+            }
+         }
+      },
+      "HideBorderConfig":{
+         "title":"Hide Border Configuration",
+         "description":"Hide a segment of the balloon border for layered balloon effects",
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "enabled":{
+               "type":"boolean",
+               "default":false,
+               "description":"Whether border hiding is active"
+            },
+            "angle":{
+               "type":"number",
+               "minimum":0,
+               "maximum":359,
+               "default":0,
+               "description":"Center angle of the hidden border segment in degrees (compass: 0=top, 90=right, 180=bottom, 270=left)"
+            },
+            "arc":{
+               "type":"number",
+               "minimum":10,
+               "maximum":180,
+               "default":60,
+               "description":"Width of the hidden segment in degrees"
             }
          }
       },

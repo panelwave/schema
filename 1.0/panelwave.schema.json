@@ -2276,7 +2276,8 @@
                "$ref":"#/$defs/Identifier"
             },
             "shape":{
-               "$ref":"#/$defs/Shape"
+               "$ref":"#/$defs/BoundingBox",
+               "description":"Bounding box for bubble position and size (normalized 0-1 coordinates)"
             },
             "balloonConfig":{
                "$ref":"#/$defs/BalloonConfigOverride",
@@ -2542,6 +2543,31 @@
                "maximum":180,
                "default":60,
                "description":"Width of the hidden segment in degrees"
+            }
+         }
+      },
+      "BoundingBox":{
+         "title":"Bounding Box",
+         "description":"Axis-aligned bounding box using normalized coordinates (0-1). Used for speech bubble positioning.",
+         "type":"object",
+         "additionalProperties":false,
+         "required":["x","y","w","h"],
+         "properties":{
+            "x":{
+               "$ref":"#/$defs/NormalizedNumber",
+               "description":"Left edge (0 = left, 1 = right)"
+            },
+            "y":{
+               "$ref":"#/$defs/NormalizedNumber",
+               "description":"Top edge (0 = top, 1 = bottom)"
+            },
+            "w":{
+               "$ref":"#/$defs/NormalizedNumber",
+               "description":"Width (fraction of container)"
+            },
+            "h":{
+               "$ref":"#/$defs/NormalizedNumber",
+               "description":"Height (fraction of container)"
             }
          }
       },

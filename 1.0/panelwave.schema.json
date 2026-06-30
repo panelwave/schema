@@ -3071,6 +3071,44 @@
             "gated":{
                "type":"boolean",
                "default":false
+            },
+            "contentType":{
+               "type":"string",
+               "enum":[
+                  "image",
+                  "video",
+                  "audio",
+                  "pdf",
+                  "text"
+               ]
+            },
+            "url":{
+               "type":"string"
+            },
+            "thumbnail":{
+               "type":"string"
+            },
+            "width":{
+               "type":"integer",
+               "minimum":0
+            },
+            "height":{
+               "type":"integer",
+               "minimum":0
+            },
+            "durationMs":{
+               "type":"number",
+               "minimum":0
+            },
+            "mimeType":{
+               "type":"string"
+            },
+            "downloadable":{
+               "type":"boolean",
+               "default":false
+            },
+            "requiredTier":{
+               "type":"string"
             }
          }
       },

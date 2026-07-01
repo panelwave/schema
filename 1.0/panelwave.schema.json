@@ -109,7 +109,10 @@
             "a4-landscape",
             "us-portrait",
             "us-landscape",
-            "video-16-9"
+            "video-16-9",
+            "square",
+            "desktop-landscape",
+            "tablet-portrait"
          ]
       },
       "Transition":{
@@ -1623,6 +1626,13 @@
             "priority":{
                "type":"integer",
                "minimum":0
+            },
+            "mutations":{
+               "type":"array",
+               "description":"Editor edge metadata/mutation ops (e.g. hotspot/edge-type descriptors).",
+               "items":{
+                  "type":"object"
+               }
             }
          }
       },
@@ -1659,6 +1669,10 @@
          "properties":{
             "id":{
                "$ref":"#/$defs/Identifier"
+            },
+            "placement":{
+               "type":"object",
+               "description":"Editor placement of the panel within its page layout (normalized x/y/w/h, rotation, grid rows/columns)."
             },
             "title":{
                "$ref":"#/$defs/LocalizedString"
@@ -1871,6 +1885,63 @@
             },
             "visibleIf":{
                "$ref":"#/$defs/JsonLogic"
+            },
+            "name":{
+               "type":"string",
+               "description":"Human-friendly layer name (authoring aid)."
+            },
+            "x":{
+               "type":"number",
+               "description":"Editor transform: X position."
+            },
+            "y":{
+               "type":"number",
+               "description":"Editor transform: Y position."
+            },
+            "width":{
+               "type":"number"
+            },
+            "height":{
+               "type":"number"
+            },
+            "scaleX":{
+               "type":"number"
+            },
+            "scaleY":{
+               "type":"number"
+            },
+            "rotation":{
+               "type":"number"
+            },
+            "locked":{
+               "type":"boolean",
+               "description":"Editor state: layer locked from selection/edits."
+            },
+            "visible":{
+               "type":"boolean",
+               "description":"Editor state: layer visibility toggle."
+            },
+            "content":{
+               "type":"string",
+               "description":"Editor text-layer content (authoring aid)."
+            },
+            "fontFamily":{
+               "type":"string"
+            },
+            "fontSize":{
+               "type":"number"
+            },
+            "fontWeight":{
+               "type":"string"
+            },
+            "color":{
+               "type":"string"
+            },
+            "align":{
+               "type":"string"
+            },
+            "verticalAlign":{
+               "type":"string"
             }
          }
       },
@@ -2043,8 +2114,7 @@
             {
                "type":"object",
                "required":[
-                  "kind",
-                  "text"
+                  "kind"
                ],
                "properties":{
                   "kind":{
@@ -2053,6 +2123,10 @@
                   },
                   "text":{
                      "$ref":"#/$defs/LocalizedString"
+                  },
+                  "content":{
+                     "type":"string",
+                     "description":"CMS text-layer content (plain string; alternative to the localized `text`)."
                   },
                   "style":{
                      "type":"object",
@@ -2285,6 +2359,34 @@
             },
             "visibleIf":{
                "$ref":"#/$defs/JsonLogic"
+            },
+            "tail":{
+               "type":"object",
+               "description":"Editor-computed balloon tail geometry (tip/anchor points, width)."
+            },
+            "tailStyle":{
+               "type":"string",
+               "description":"Editor tail style preset (e.g. \"normal\")."
+            },
+            "textStyle":{
+               "type":"object",
+               "description":"Editor text styling (font, color, alignment, padding)."
+            },
+            "data":{
+               "type":"object",
+               "description":"Editor-computed shape geometry (e.g. ellipse cx/cy/rx/ry)."
+            },
+            "style":{
+               "type":"object",
+               "description":"Editor bubble style (font, colors, stroke)."
+            },
+            "locked":{
+               "type":"boolean",
+               "description":"Editor state: bubble locked from selection/edits."
+            },
+            "visible":{
+               "type":"boolean",
+               "description":"Editor state: bubble visibility toggle."
             }
          }
       },
@@ -3178,6 +3280,49 @@
             "ageGate":{
                "type":"integer",
                "minimum":0
+            },
+            "name":{
+               "type":"string",
+               "description":"CMS: human-friendly rule name."
+            },
+            "description":{
+               "type":"string"
+            },
+            "entitlementType":{
+               "type":"string",
+               "description":"CMS entitlement kind (e.g. purchase, subscription)."
+            },
+            "subscriptionTiers":{
+               "type":"array",
+               "items":{
+                  "type":"string"
+               }
+            },
+            "price":{
+               "type":"object",
+               "description":"CMS embedded price (amount + currency).",
+               "properties":{
+                  "amount":{
+                     "type":"number"
+                  },
+                  "currency":{
+                     "type":"string"
+                  }
+               }
+            },
+            "minimumAge":{
+               "type":"integer",
+               "minimum":0
+            },
+            "previewPanelCount":{
+               "type":"integer",
+               "minimum":0
+            },
+            "targetPanelIds":{
+               "type":"array",
+               "items":{
+                  "$ref":"#/$defs/Identifier"
+               }
             }
          },
          "allOf":[

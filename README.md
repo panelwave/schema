@@ -394,6 +394,8 @@ Additive, backward-compatible with 1.0.0 — existing manifests remain valid unc
   - Consumers (player, CMS) apply this mapping at read time; the CMS only writes the new fields going forward.
 - `loopFromMs` constraint `startAtMs <= loopFromMs < asset.durationMs` is a semantic rule documented in the field description — JSON Schema cannot express this cross-field/cross-asset constraint structurally; validate it in application code.
 - `AssetCatalogItemVideo`: added optional `poster` (`VideoPoster`: required `src`, optional `mime` matching `^image\/`, optional `w`/`h`) — a poster/preview frame shown before playback starts, e.g. for click-to-play and reduced-motion presentations.
+- `VideoLayer`: added `controls` (boolean, default `false`) to show native video controls.
+- `tracking.eventWhitelist`: extended with `videoPlay`, `videoPause`, `videoEnded`, `videoLoop` (camelCase, matching the events the player emits — note the enum's older entries are snake_case; that pre-existing inconsistency is unchanged here).
 
 ### 1.0.0
 

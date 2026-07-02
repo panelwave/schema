@@ -399,8 +399,8 @@ Custom properties prefixed with `x-` are allowed throughout:
 ### Official Repositories
 
 - **Player**: [bitbucket.org/jenshoppe/panelwave-player](https://bitbucket.org/jenshoppe/panelwave-player) - Open-source Angular player
-- **Types**: [@panelwave/types](https://www.npmjs.com/package/@panelwave/types) - tbd TypeScript type definitions
-- **CLI**: [@panelwave/cli](https://www.npmjs.com/package/@panelwave/cli) - tbd Validation and bundling tools
+- **Types**: [`@panelwave/types`](https://bitbucket.org/jenshoppe/panelwave-packages/src/master/packages/types) — Full TypeScript interfaces for type-safe development
+- **CLI**: [`@panelwave/cli`](https://bitbucket.org/jenshoppe/panelwave-packages/src/master/packages/cli) — Validate, bundle, diff, and upgrade manifests from the command line
 - **Examples**: [tbd](tbd) - Sample manifests
 
 ### Documentation

@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.0.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.1.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -24,9 +24,9 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.0.0
+### Current Version: 1.1.0
 
-- **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json)
+- **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
 - **Draft**: JSON Schema 2020-12
 
@@ -381,7 +381,20 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ## Version History
 
-### 1.0.0 (Current)
+### 1.1.0 (Current)
+
+Additive, backward-compatible with 1.0.0 — existing manifests remain valid unchanged.
+
+- `VideoLayer`: added `playMode` (`once` | `loop` | `pingpong` | `loop-from`, default `once`), `loopFromMs` (loop re-entry point in ms, only meaningful for `playMode: "loop-from"`), and `startMode` (`on-view` | `on-hover` | `on-click`, default `on-view`).
+- `VideoVariant`: added `direction` (`forward` | `reverse`, default `forward`) to mark pre-rendered time-reversed encodes used for smooth ping-pong playback.
+- `settings.ui`: added work-level defaults `videoPlayModeDefault`, `videoStartModeDefault`, `videoMutedDefault`, cascading to per-layer overrides (same pattern as balloon config).
+- **Legacy field mapping** (`autoplay`/`loop` → `startMode`/`playMode`): the schema 1.0 fields `VideoLayer.autoplay` and `VideoLayer.loop` remain valid and are not deprecated. Precedence when both old and new fields are present:
+  - `loop: true` is interpreted as `playMode: "loop"` **only when `playMode` is absent**. If `playMode` is present, it always wins.
+  - `autoplay: true` is interpreted as `startMode: "on-view"`; explicit `autoplay: false` is interpreted as `startMode: "on-click"` — **only when `startMode` is absent**. If `startMode` is present, it always wins.
+  - Consumers (player, CMS) apply this mapping at read time; the CMS only writes the new fields going forward.
+- `loopFromMs` constraint `startAtMs <= loopFromMs < asset.durationMs` is a semantic rule documented in the field description — JSON Schema cannot express this cross-field/cross-asset constraint structurally; validate it in application code.
+
+### 1.0.0
 
 - Initial public release
 - Support for panels, chapters, graph-based flow

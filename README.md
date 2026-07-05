@@ -6,6 +6,8 @@
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
+> **Documentation:** [docs.panelwave.org/schema/overview](https://docs.panelwave.org/schema/overview)
+
 ## Overview
 
 PanelWave is an open JSON format for creating dynamic, interactive graphic novels that combine panels, layers, motion, sound, and branching narratives. This repository contains the official JSON Schema definitions that validate PanelWave manifest files.

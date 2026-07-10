@@ -1307,6 +1307,10 @@
             "id":{
                "$ref":"#/$defs/Identifier"
             },
+            "chapterId":{
+               "type":"string",
+               "description":"CMS database chapter UUID. Used by the editor for API calls; not required by the player."
+            },
             "title":{
                "$ref":"#/$defs/LocalizedString"
             },
@@ -1350,6 +1354,10 @@
          "properties":{
             "id":{
                "$ref":"#/$defs/Identifier"
+            },
+            "pageId":{
+               "type":"string",
+               "description":"CMS-internal database identifier for the page (UUID). Used by the editor for API calls; players may ignore it."
             },
             "title":{
                "$ref":"#/$defs/LocalizedString"

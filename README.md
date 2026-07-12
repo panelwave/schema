@@ -391,6 +391,7 @@ Additive, backward-compatible with 1.2.0 — existing manifests remain valid unc
 - **`settings.typography.balloonPresets`** (map of name → `BalloonConfigOverride`): named balloon presets. `SpeechBubble` gains **`styleRef`** referencing a key, slotted into the existing balloon cascade: work `balloon_config` → character `balloonConfig` → **preset** → inline `balloonConfig` (inline fields win).
 - `TextLayer.style` is now the shared `$defs/TextStyle` definition (same shape as before; also used by the preset map).
 - **Unknown `styleRef`s are ignored** by consumers (render as if unset); authoring tools should warn about dangling references.
+- **The speech toggle is now implicit**: every speech bubble is inherently subject to the reader's global speech toggle (initial state: `settings.ui.speechDefault`); the player ANDs the toggle on top of any `visibleIf`. Manifests must no longer carry per-bubble `visibleIf: {"var": "prefs.speech"}` boilerplate — `visibleIf` is reserved for actual story logic (e.g. the clue bubbles in sample 09). Previously, forgetting the boilerplate on one bubble silently made it immune to the toggle.
 
 ### 1.2.0
 

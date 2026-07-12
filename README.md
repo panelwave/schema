@@ -383,7 +383,15 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ## Version History
 
-### 1.1.0 (Current)
+### 1.2.0 (Current)
+
+Relaxing, backward-compatible with 1.1.0 — existing manifests remain valid unchanged. This release lets exporters write leaner manifests by omitting derivable/default values ("free wins"):
+
+- **`mime` is now optional** on `ImageVariant`, `AudioVariant`, `VideoVariant`, `SubtitleVariant` and `VectorVariant`. When omitted, consumers derive the MIME type from the `src` file extension: `png`/`jpg`/`jpeg`/`webp`/`gif`/`avif`/`svg` → `image/*`, `mp3` → `audio/mpeg`, `m4a` → `audio/mp4`, `ogg`/`wav` → `audio/*`, `mp4`/`webm` → `video/*`, `m3u8` → `application/vnd.apple.mpegurl`, `pdf` → `application/pdf`, `vtt` → `text/vtt`, `srt` → `application/x-subrip`. Query strings/fragments are ignored. `mime` **must** still be written when the `src` has no recognizable extension or the actual type differs from the derivation.
+- **`Edge.transition` inheritance clarified**: an edge without a `transition` inherits the active output format's `settings.outputPresets[format].defaultTransition`; if no preset defines one, the player falls back to a plain cut. Exporters should only write transitions that differ from the format default.
+- **Export discipline for schema defaults** (no schema change, now the documented convention): exporters should omit values equal to schema defaults — notably `Panel.shareable: true`, `ExtraBlock.shareable: true`, and placement `z: 0` / `r: 0`. The umbrella repo's `normalize-samples.js` applies these rules to existing manifests.
+
+### 1.1.0
 
 Additive, backward-compatible with 1.0.0 — existing manifests remain valid unchanged.
 

@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.1.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.3.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.1.0
+### Current Version: 1.3.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -383,7 +383,16 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ## Version History
 
-### 1.2.0 (Current)
+### 1.3.0 (Current)
+
+Additive, backward-compatible with 1.2.0 — existing manifests remain valid unchanged. Introduces **reusable style presets** ("CSS classes" for the manifest): shared styling is defined once under `settings.typography` and referenced by name, so restyling a whole album means editing one preset instead of hundreds of inline blocks.
+
+- **`settings.typography.textStyles`** (map of name → `TextStyle`): named text style presets. `TextLayer` gains **`styleRef`** referencing a key. Resolution cascade: work typography defaults → preset → inline `style` (inline fields win field-by-field).
+- **`settings.typography.balloonPresets`** (map of name → `BalloonConfigOverride`): named balloon presets. `SpeechBubble` gains **`styleRef`** referencing a key, slotted into the existing balloon cascade: work `balloon_config` → character `balloonConfig` → **preset** → inline `balloonConfig` (inline fields win).
+- `TextLayer.style` is now the shared `$defs/TextStyle` definition (same shape as before; also used by the preset map).
+- **Unknown `styleRef`s are ignored** by consumers (render as if unset); authoring tools should warn about dangling references.
+
+### 1.2.0
 
 Relaxing, backward-compatible with 1.1.0 — existing manifests remain valid unchanged. This release lets exporters write leaner manifests by omitting derivable/default values ("free wins"):
 

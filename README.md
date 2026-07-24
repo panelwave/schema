@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.3.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.4.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.3.0
+### Current Version: 1.4.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -383,7 +383,18 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ## Version History
 
-### 1.3.0 (Current)
+### 1.4.0 (Current)
+
+Additive, backward-compatible with 1.3.0 — existing manifests remain valid unchanged. Introduces the **infinite canvas**: a chapter's panels can be placed on one continuous world-space plane and read via an authored camera that travels along the existing graph (Scott McCloud's "infinite canvas"; a single-column layout yields a webtoon-style vertical experience from the same model). Concept & integration study: `_spec_cms/infinite_canvas/` in the umbrella repo.
+
+- **`Chapter.canvas`** (optional `CanvasLayout`): world-space `placements` (map of panel id → `CanvasPlacement`), optional `background` (color / tiled asset), `camera` policy (`fitMode`, `overview.maxZoomOut`, `freeRoam: off | between-moves | always`, `bounds`), and presentational `decorations`. **World units: 1 unit = 1 CSS pixel at zoom 1.0**; coordinates are unbounded, negatives allowed. Panel-internal coordinates (layers, bubbles, hotspots) are untouched — placements only frame the panel on the plane.
+- **`CanvasPlacement`**: `x`/`y`/`w`/`h` (world units), optional `z`, `r` (degrees), `origin`, `enterFraming` (panel-relative `NormalizedRect` the camera frames on arrival), `revealMode` (`always` | `on-approach` | `on-visit` — spoiler protection at overview zoom).
+- **`Edge.cameraMove`** (optional `CameraMove`): camera travel for canvas view — `path` (`direct` | `arc` | `waypoints` + `WorldPoint[]`), `zoomProfile` (`hold` | `pull-back` | `dive`), `durationMs`, `easing`, `reducedMotionFallback` (a `Transition` used when the reader prefers reduced motion). Inheritance mirrors `defaultTransition`: edge → `settings.outputPresets[format].defaultCameraMove` → built-in direct/hold/800ms/ease-in-out.
+- **`FormatPreset.canvasView`** (boolean, default `false`) and **`FormatPreset.defaultCameraMove`**: canvas view renders only when the active format enables it **and** the chapter has a `canvas`; otherwise players fall back to panel view unchanged. Print formats ignore `canvas` — `pages` remain the print model.
+- **The graph remains the trail**: `canvas` adds *where panels sit*, never *what comes next*. Branching, conditions, variables, paywalls and analytics are unaffected; screen readers keep using the graph linearization (canvas is presentational).
+- Semantic rules (application-level, beyond JSON Schema): every `placements` key must exist in the chapter's `panels` (CLI: error); every panel reachable from `graph.entry` should have a placement when `canvas` is present (CLI: warning); very large canvases (> 150 placed panels) get a performance warning.
+
+### 1.3.0
 
 Additive, backward-compatible with 1.2.0 — existing manifests remain valid unchanged. Introduces **reusable style presets** ("CSS classes" for the manifest): shared styling is defined once under `settings.typography` and referenced by name, so restyling a whole album means editing one preset instead of hundreds of inline blocks.
 

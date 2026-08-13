@@ -401,6 +401,7 @@ Additive, backward-compatible with 1.2.0 — existing manifests remain valid unc
 - **`settings.typography.textStyles`** (map of name → `TextStyle`): named text style presets. `TextLayer` gains **`styleRef`** referencing a key. Resolution cascade: work typography defaults → preset → inline `style` (inline fields win field-by-field).
 - **`settings.typography.balloonPresets`** (map of name → `BalloonConfigOverride`): named balloon presets. `SpeechBubble` gains **`styleRef`** referencing a key, slotted into the existing balloon cascade: work `balloon_config` → character `balloonConfig` → **preset** → inline `balloonConfig` (inline fields win).
 - `TextLayer.style` is now the shared `$defs/TextStyle` definition (same shape as before; also used by the preset map).
+- **`balloonType: "narrator"`**: new tenth balloon type — a sharp-cornered caption box for narrator/caption text (available in `BalloonConfig` and `BalloonConfigOverride` alongside `normal`, `rectangle`, `cutTop`, `cutTopRight`, `cutTopLeft`, `thought`, `shout`, `whisper`, `connector`).
 - **Unknown `styleRef`s are ignored** by consumers (render as if unset); authoring tools should warn about dangling references.
 - **The speech toggle is now implicit**: every speech bubble is inherently subject to the reader's global speech toggle (initial state: `settings.ui.speechDefault`); the player ANDs the toggle on top of any `visibleIf`. Manifests must no longer carry per-bubble `visibleIf: {"var": "prefs.speech"}` boilerplate — `visibleIf` is reserved for actual story logic (e.g. the clue bubbles in sample 09). Previously, forgetting the boilerplate on one bubble silently made it immune to the toggle.
 - `tracking.eventWhitelist`: added `work_complete` — emitted by the player when the reader reaches an end panel (a panel with no outgoing edges); analytics consumers treat it as a completed read-through.
@@ -449,7 +450,7 @@ Additive, backward-compatible with 1.0.0 — existing manifests remain valid unc
 - **Player**: [bitbucket.org/jenshoppe/panelwave-player](https://bitbucket.org/jenshoppe/panelwave-player) - Open-source Angular player
 - **Types**: [`@panelwave/types`](https://bitbucket.org/jenshoppe/panelwave-packages/src/master/packages/types) — Full TypeScript interfaces for type-safe development
 - **CLI**: [`@panelwave/cli`](https://bitbucket.org/jenshoppe/panelwave-packages/src/master/packages/cli) — Validate, bundle, diff, and upgrade manifests from the command line
-- **Examples**: [tbd](tbd) - Sample manifests
+- **Examples**: Sample manifests currently live in the umbrella workspace (`_spec/samples/`, validated by `validate-samples.js`); a public samples repository is tbd
 
 ### Documentation
 
@@ -564,16 +565,16 @@ All documentation (including this README) is licensed under CC BY 4.0.
 This schema does not dictate licensing for:
 - Content created using PanelWave format (your work remains yours)
 - Software that reads or writes PanelWave manifests
-- Player implementations (the official player is MIT/Apache-2.0)
+- Player implementations (the official player is MIT-licensed)
 
 ## Support
 
 - **Documentation**: [docs.panelwave.org](https://docs.panelwave.org)
-- **Issues**: [GitHub Issues](https://github.com/panelwave/schema/issues)
+- **Issues**: [bitbucket.org/jenshoppe/panelwave-schema](https://bitbucket.org/jenshoppe/panelwave-schema)
 - **Email**: schema@panelwave.org
 - **Discord**: [discord.gg/panelwave](https://discord.gg/panelwave)
 
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.0.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.4.0 | [panelwave.org](https://panelwave.org) | Made for creators

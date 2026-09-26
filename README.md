@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.4.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.5.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.4.0
+### Current Version: 1.5.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -122,6 +122,7 @@ panelwave validate ./my-comic/panelwave.json --schema 1.0.0
 | `assets` | Object |  | Asset catalog with images, audio, video |
 | `variables` | Object |  | Variable definitions for conditional logic |
 | `settings` | Object |  | Global UI/UX defaults and preload settings |
+| `localization` | Object |  | Translation workflow state: locales, entries, glossary (since 1.5; rendering consumers may ignore it) |
 | `extras` | Object |  | Additional content (covers, character sheets, bonus art) |
 | `paywall` | Object |  | Entitlement and paywall rules |
 | `tracking` | Object |  | Analytics and event tracking configuration |
@@ -383,7 +384,15 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ## Version History
 
-### 1.4.0 (Current)
+### 1.5.0 (Current)
+
+Additive, backward-compatible with 1.4.0 — existing manifests remain valid unchanged. Adds the authoring metadata a **portable work archive** needs, so a whole work (manifest + assets) can be exported as one zip and re-imported into another team or PanelWave system without losing its asset-library structure or translation state. Both additions are authoring metadata: rendering consumers may ignore them.
+
+- **`assets.folders`** (optional array of `AssetFolder`: `id`, `name`, optional `parentId`, `order`): the asset-library folder tree.
+- **`folderIds`** on every asset catalog item (optional, unique `Identifier[]`): the folders an asset is filed under (n:m).
+- **`localization`** (optional top-level block): translation workflow state — `locales` (`code`, `isDefault`, `isActive`), `entries` (`key`, `defaultText`, `category`, `context`, `isStale`, per-locale `values` with `text` and a `machine` flag) and `glossary` (`term`, `caseSensitive`, per-locale `translations`).
+
+### 1.4.0
 
 Additive, backward-compatible with 1.3.0 — existing manifests remain valid unchanged. Introduces the **infinite canvas**: a chapter's panels can be placed on one continuous world-space plane and read via an authored camera that travels along the existing graph (Scott McCloud's "infinite canvas"; a single-column layout yields a webtoon-style vertical experience from the same model). Concept & integration study: `_spec_cms/infinite_canvas/` in the umbrella repo.
 
@@ -577,4 +586,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.4.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.5.0 | [panelwave.org](https://panelwave.org) | Made for creators

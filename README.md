@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.5.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.6.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.5.0
+### Current Version: 1.6.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -343,6 +343,28 @@ Register all assets with variants for different formats:
 }
 ```
 
+#### Paywall
+
+`paywall.rules` gate content by entitlement. `scope` is `work`, `chapter`, `panel` or `extras` (all but `work` name their target in `refId`); `requireEntitlement` (required) and the CMS field `entitlementType` say what unlocks the rule (`free`, `subscription`, `purchase`, `age_gate`, or a custom product key); `ageGate` / `minimumAge` add an age check on top; `previewPanels` / `previewPanelCount` keep the first panels free. Since 1.6, a purchase rule can list every product that unlocks it — owning any one is enough:
+
+```json
+{
+  "paywall": {
+    "rules": [
+      {
+        "id": "pw-ch8",
+        "scope": "chapter",
+        "refId": "ch8",
+        "requireEntitlement": "premium-edition",
+        "entitlementType": "purchase",
+        "requiredProductIds": ["premium-edition", "ch8-single"],
+        "price": { "amount": 2.99, "currency": "EUR" }
+      }
+    ]
+  }
+}
+```
+
 ## Schema Reference
 
 ### Common Types
@@ -384,7 +406,15 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ## Version History
 
-### 1.5.0 (Current)
+### 1.6.0 (Current)
+
+Additive, backward-compatible with 1.5.0 — existing manifests remain valid unchanged. Lets a purchase rule name **several unlocking products**.
+
+- **`PaywallRule.requiredProductIds`** (optional, unique `Identifier[]`, at least one item): the products (ids from the host's product catalogue) that unlock a purchase rule. A reader satisfies the rule when they own **at least one** of the listed products, and players offer one Buy option per listed product. Other rule kinds ignore it.
+- When the field is absent, the pre-1.6 behaviour is unchanged: `requireEntitlement` is the only product hint (a value that is not an entitlement type name names the single product to offer), and a reader that cannot resolve it treats any purchase as satisfying the rule. Exporters that target pre-1.6 players should keep `requireEntitlement` set to the first listed product.
+- The manifest carries product **ids** only; product names and prices stay with the host's catalogue. A rule's `name` / `price` remain the rule-level display values.
+
+### 1.5.0
 
 Additive, backward-compatible with 1.4.0 — existing manifests remain valid unchanged. Adds the authoring metadata a **portable work archive** needs, so a whole work (manifest + assets) can be exported as one zip and re-imported into another team or PanelWave system without losing its asset-library structure or translation state. Both additions are authoring metadata: rendering consumers may ignore them.
 
@@ -586,4 +616,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.5.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.6.0 | [panelwave.org](https://panelwave.org) | Made for creators

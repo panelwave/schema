@@ -345,11 +345,15 @@ Register all assets with variants for different formats:
 
 #### Paywall
 
-`paywall.rules` gate content by entitlement. `scope` is `work`, `chapter`, `panel` or `extras` (all but `work` name their target in `refId`); `requireEntitlement` (required) and the CMS field `entitlementType` say what unlocks the rule (`free`, `subscription`, `purchase`, `age_gate`, or a custom product key); `ageGate` / `minimumAge` add an age check on top; `previewPanels` / `previewPanelCount` keep the first panels free. Since 1.6, a purchase rule can list every product that unlocks it — owning any one is enough:
+`paywall.rules` gate content by entitlement. `scope` is `work`, `chapter`, `panel` or `extras` (all but `work` name their target in `refId`); `requireEntitlement` (required) and the CMS field `entitlementType` say what unlocks the rule (`free`, `subscription`, `purchase`, `age_gate`, or a custom product key); `ageGate` / `minimumAge` add an age check on top; `previewPanels` / `previewPanelCount` keep the first panels free. Since 1.6, a purchase rule can list every product that unlocks it — owning any one is enough — and `paywall.products` describes those products for the Buy options:
 
 ```json
 {
   "paywall": {
+    "products": [
+      { "id": "premium-edition", "name": { "en-US": "Premium edition" }, "price": { "amount": 4.99, "currency": "EUR" } },
+      { "id": "ch8-single", "name": { "en-US": "Chapter 8 only" }, "price": { "amount": 1.99, "currency": "EUR" } }
+    ],
     "rules": [
       {
         "id": "pw-ch8",
@@ -408,11 +412,11 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ### 1.6.0 (Current)
 
-Additive, backward-compatible with 1.5.0 — existing manifests remain valid unchanged. Lets a purchase rule name **several unlocking products**.
+Additive, backward-compatible with 1.5.0 — existing manifests remain valid unchanged. Lets a purchase rule name **several unlocking products**, and lets the manifest describe those products for the reader.
 
 - **`PaywallRule.requiredProductIds`** (optional, unique `Identifier[]`, at least one item): the products (ids from the host's product catalogue) that unlock a purchase rule. A reader satisfies the rule when they own **at least one** of the listed products, and players offer one Buy option per listed product. Other rule kinds ignore it.
 - When the field is absent, the pre-1.6 behaviour is unchanged: `requireEntitlement` is the only product hint (a value that is not an entitlement type name names the single product to offer), and a reader that cannot resolve it treats any purchase as satisfying the rule. Exporters that target pre-1.6 players should keep `requireEntitlement` set to the first listed product.
-- The manifest carries product **ids** only; product names and prices stay with the host's catalogue. A rule's `name` / `price` remain the rule-level display values.
+- **`paywall.products`** (optional array of `PaywallProduct`: required `id`, optional `name` and `description` as `LocalizedString`, `price` `{ amount, currency }`, `type` `purchase` | `subscription`): display information for the products and subscription tiers the rules sell. Rules reference entries by id through `requiredProductIds`, `requireEntitlement` (a product key) or `subscriptionTiers`; players label each Buy / Subscribe option with the entry's localized name, description and price, falling back to the rule's `name` / `price`, then to the bare id. Entries are informational — the rules decide what unlocks what, and the host's checkout stays the authority on the charged price. Ids should be unique (application-level rule).
 
 ### 1.5.0
 

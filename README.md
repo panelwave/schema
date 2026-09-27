@@ -394,7 +394,7 @@ Additive, backward-compatible with 1.4.0 — existing manifests remain valid unc
 
 ### 1.4.0
 
-Additive, backward-compatible with 1.3.0 — existing manifests remain valid unchanged. Introduces the **infinite canvas**: a chapter's panels can be placed on one continuous world-space plane and read via an authored camera that travels along the existing graph (Scott McCloud's "infinite canvas"; a single-column layout yields a webtoon-style vertical experience from the same model). Concept & integration study: `_spec_cms/infinite_canvas/` in the umbrella repo.
+Additive, backward-compatible with 1.3.0 — existing manifests remain valid unchanged. Introduces the **infinite canvas**: a chapter's panels can be placed on one continuous world-space plane and read via an authored camera that travels along the existing graph (a single-column layout yields a webtoon-style vertical experience from the same model). See the [infinite canvas docs](https://docs.panelwave.org/concepts/infinite-canvas) for the concept.
 
 - **`Chapter.canvas`** (optional `CanvasLayout`): world-space `placements` (map of panel id → `CanvasPlacement`), optional `background` (color / tiled asset), `camera` policy (`fitMode`, `overview.maxZoomOut`, `freeRoam: off | between-moves | always`, `bounds`), and presentational `decorations`. **World units: 1 unit = 1 CSS pixel at zoom 1.0**; coordinates are unbounded, negatives allowed. Panel-internal coordinates (layers, bubbles, hotspots) are untouched — placements only frame the panel on the plane.
 - **`CanvasPlacement`**: `x`/`y`/`w`/`h` (world units), optional `z`, `r` (degrees), `origin`, `enterFraming` (panel-relative `NormalizedRect` the camera frames on arrival), `revealMode` (`always` | `on-approach` | `on-visit` — spoiler protection at overview zoom).
@@ -456,14 +456,14 @@ Additive, backward-compatible with 1.0.0 — existing manifests remain valid unc
 
 ### Official Repositories
 
-- **Player**: [github.com/panelwave/player](https://github.com/panelwave/player) - Open-source Angular player
-- **Types**: [`@panelwave/types`](https://github.com/panelwave/packages/tree/master/packages/types) — Full TypeScript interfaces for type-safe development
-- **CLI**: [`@panelwave/cli`](https://github.com/panelwave/packages/tree/master/packages/cli) — Validate, bundle, diff, and upgrade manifests from the command line
-- **Examples**: Sample manifests currently live in the umbrella workspace (`_spec/samples/`, validated by `validate-samples.js`); a public samples repository is tbd
+- **Player**: [github.com/panelwave/player](https://github.com/panelwave/player) — open-source Angular player, on npm as [`@panelwave/player`](https://www.npmjs.com/package/@panelwave/player) ([live demo](https://panelwave.github.io/player/))
+- **Types**: [`@panelwave/types`](https://www.npmjs.com/package/@panelwave/types) ([source](https://github.com/panelwave/packages/tree/master/packages/types)) — full TypeScript interfaces for type-safe development
+- **CLI**: [`@panelwave/cli`](https://www.npmjs.com/package/@panelwave/cli) ([source](https://github.com/panelwave/packages/tree/master/packages/cli)) — validate, bundle, diff, and upgrade manifests from the command line; bundles a copy of this schema
+- **Examples**: the player's demo manifests live in [panelwave/player](https://github.com/panelwave/player/tree/master/projects/demo/src/assets); a public samples repository is planned
 
 ### Documentation
 
-- **Website**: [panelwave.org](https://panelwave.org) tbd
+- **Website**: [panelwave.org](https://panelwave.org)
 - **Specification**: [docs.panelwave.org/spec](https://docs.panelwave.org/spec) tbd
 - **Plugin API**: [docs.panelwave.org/plugins](https://docs.panelwave.org/plugins) tbd
 - **Migration Guide**: [docs.panelwave.org/migration](https://docs.panelwave.org/migration) tbd

@@ -456,9 +456,9 @@ Additive, backward-compatible with 1.0.0 — existing manifests remain valid unc
 
 ### Official Repositories
 
-- **Player**: [bitbucket.org/jenshoppe/panelwave-player](https://bitbucket.org/jenshoppe/panelwave-player) - Open-source Angular player
-- **Types**: [`@panelwave/types`](https://bitbucket.org/jenshoppe/panelwave-packages/src/master/packages/types) — Full TypeScript interfaces for type-safe development
-- **CLI**: [`@panelwave/cli`](https://bitbucket.org/jenshoppe/panelwave-packages/src/master/packages/cli) — Validate, bundle, diff, and upgrade manifests from the command line
+- **Player**: [github.com/panelwave/player](https://github.com/panelwave/player) - Open-source Angular player
+- **Types**: [`@panelwave/types`](https://github.com/panelwave/packages/tree/master/packages/types) — Full TypeScript interfaces for type-safe development
+- **CLI**: [`@panelwave/cli`](https://github.com/panelwave/packages/tree/master/packages/cli) — Validate, bundle, diff, and upgrade manifests from the command line
 - **Examples**: Sample manifests currently live in the umbrella workspace (`_spec/samples/`, validated by `validate-samples.js`); a public samples repository is tbd
 
 ### Documentation
@@ -579,7 +579,7 @@ This schema does not dictate licensing for:
 ## Support
 
 - **Documentation**: [docs.panelwave.org](https://docs.panelwave.org)
-- **Issues**: [bitbucket.org/jenshoppe/panelwave-schema](https://bitbucket.org/jenshoppe/panelwave-schema)
+- **Issues**: [github.com/panelwave/schema/issues](https://github.com/panelwave/schema/issues)
 - **Email**: schema@panelwave.org
 - **Discord**: [discord.gg/panelwave](https://discord.gg/panelwave)
 

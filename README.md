@@ -411,6 +411,16 @@ Register all assets with variants for different formats:
 }
 ```
 
+#### Asset URLs
+
+`src`, `poster.src`, character `images.*`, extras `url`/`thumbnail` and every other asset reference may be absolute or relative. Consumers resolve a **relative** reference in this order:
+
+1. `assets.base.<category>Base` for the asset's category (`imageBase`, `audioBase`, `videoBase`, `pluginsBase`; vector assets use `imageBase`),
+2. `assets.base.mediaBase`,
+3. the URL the manifest document itself was loaded from — the same rule a browser applies to relative links in an HTML page.
+
+Absolute URLs (including `data:` and `blob:`) are used as-is. A directory holding `panelwave.json` next to its asset files is therefore a complete, playable bundle without any `assets.base`; a CDN-hosted work declares one `mediaBase` and keeps its references short. Presigned or otherwise per-object URLs cannot share a base and stay absolute.
+
 #### Paywall
 
 `paywall.rules` gate content by entitlement. `scope` is `work`, `chapter`, `panel` or `extras` (all but `work` name their target in `refId`); `requireEntitlement` (required) and the CMS field `entitlementType` say what unlocks the rule (`free`, `subscription`, `purchase`, `age_gate`, or a custom product key); `ageGate` / `minimumAge` add an age check on top; `previewPanels` / `previewPanelCount` keep the first panels free. Since 1.6, a purchase rule can list every product that unlocks it — owning any one is enough — and `paywall.products` describes those products for the Buy options:

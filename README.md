@@ -293,6 +293,62 @@ Panels support layers, speech bubbles, hotspots, and media:
 }
 ```
 
+#### Panel Animations
+
+`Panel.animations` animates a panel while it is shown: a camera move between two viewport rects, layer keyframes, or both. Keyframes with the same `layerId` and `property` form a track; values are interpolated between neighbouring keyframes with the easing of the earlier one, and hold before the first and after the last keyframe.
+
+```json
+{
+  "animations": {
+    "name": "Robot rolls in",
+    "durationMs": 4000,
+    "loop": false,
+    "keyframes": [
+      { "layerId": "character", "property": "transform.x", "timeMs": 0, "value": -0.4, "easing": "ease-out" },
+      { "layerId": "character", "property": "transform.x", "timeMs": 3000, "value": 0 },
+      { "layerId": "character", "property": "opacity", "timeMs": 0, "value": 0 },
+      { "layerId": "character", "property": "opacity", "timeMs": 800, "value": 1 }
+    ]
+  }
+}
+```
+
+| `property` | Value |
+|------------|-------|
+| `opacity` | 0–1, replaces the layer's opacity |
+| `transform.x`, `transform.y` | Offset from the layer's resting position as a fraction of the panel's width / height (`0.1` = 10 % right / down) |
+| `transform.scale` | Scale factor around the layer's center (`1` = unchanged) |
+| `transform.rotation` | Degrees clockwise around the layer's center |
+| `blur` | Blur radius in px at a panel width of 1024 px (scaled with the rendered panel) |
+| `brightness`, `contrast`, `saturate` | Multiplier (`1` = unchanged) |
+
+Players that honour a reduced-motion preference skip the motion and show the end state.
+
+#### Extras
+
+`extras` holds bonus content: `cover`, `alt_cover`, `character_sheets`, `author_info`, `author_interviews`, `bonus_art`, `fan_art` and `behind_the_scenes`. `alt_cover` is one block or an array of blocks (several alternative covers). A character sheet names its character with `characterId`, or — for an ensemble sheet showing several characters — with `characterIds`:
+
+```json
+{
+  "extras": {
+    "alt_cover": [
+      { "id": "cover-b", "title": { "en-US": "Variant cover B" }, "contentType": "image", "url": "covers/b.webp" },
+      { "id": "cover-c", "title": { "en-US": "Variant cover C" }, "contentType": "image", "url": "covers/c.webp" }
+    ],
+    "character_sheets": [
+      {
+        "id": "cast",
+        "title": { "en-US": "The cast" },
+        "characterId": "ferdl",
+        "characterIds": ["ferdl", "lena", "tobi"],
+        "contentType": "image",
+        "url": "extras/cast.webp"
+      }
+    ]
+  }
+}
+```
+
 #### Assets Catalog
 
 Register all assets with variants for different formats:
@@ -412,10 +468,13 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ### 1.6.0 (Current)
 
-Additive, backward-compatible with 1.5.0 — existing manifests remain valid unchanged. Lets a purchase rule name **several unlocking products**, and lets the manifest describe those products for the reader.
+Additive, backward-compatible with 1.5.0 — existing manifests remain valid unchanged. Lets a purchase rule name **several unlocking products**, lets the manifest describe those products for the reader, and adds **layer keyframe animations**, **several alternative covers** and **ensemble character sheets**.
 
 - **`PaywallRule.requiredProductIds`** (optional, unique `Identifier[]`, at least one item): the products (ids from the host's product catalogue) that unlock a purchase rule. A reader satisfies the rule when they own **at least one** of the listed products, and players offer one Buy option per listed product. Other rule kinds ignore it.
 - When the field is absent, the pre-1.6 behaviour is unchanged: `requireEntitlement` is the only product hint (a value that is not an entitlement type name names the single product to offer), and a reader that cannot resolve it treats any purchase as satisfying the rule. Exporters that target pre-1.6 players should keep `requireEntitlement` set to the first listed product.
+- **Layer keyframe animations** — `PanelAnimations` gains optional `keyframes` (array of `AnimationKeyframe`: required `layerId`, `property`, `timeMs`, `value`; optional `id`, `easing`), `loop` and `name`. Animatable properties: `opacity`, `transform.x`, `transform.y`, `transform.scale`, `transform.rotation`, `blur`, `brightness`, `contrast`, `saturate` (units in [Panel Animations](#panel-animations)). The camera-move fields (`startViewportRect`, `endViewportRect`, `durationMs`, `easing`) are unchanged; players that do not know keyframes ignore them and show the static panel.
+- **Several alternative covers** — `extras.alt_cover` accepts one `ExtraBlock` (as before) or a non-empty array of them. Exporters emit the single-object form when there is exactly one cover, so manifests with one alternative cover are unchanged.
+- **Ensemble character sheets** — `ExtraCharacterSheet` accepts `characterIds` (non-empty, unique `Identifier[]`) next to `characterId`; at least one of the two is required. `characterIds` is the authoritative list when present; exporters keep `characterId` set to its first entry for consumers that only read the single id.
 - **`paywall.products`** (optional array of `PaywallProduct`: required `id`, optional `name` and `description` as `LocalizedString`, `price` `{ amount, currency }`, `type` `purchase` | `subscription`): display information for the products and subscription tiers the rules sell. Rules reference entries by id through `requiredProductIds`, `requireEntitlement` (a product key) or `subscriptionTiers`; players label each Buy / Subscribe option with the entry's localized name, description and price, falling back to the rule's `name` / `price`, then to the bare id. Entries are informational — the rules decide what unlocks what, and the host's checkout stays the authority on the charged price. Ids should be unique (application-level rule).
 
 ### 1.5.0

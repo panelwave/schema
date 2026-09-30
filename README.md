@@ -295,7 +295,7 @@ Panels support layers, speech bubbles, hotspots, and media:
 
 #### Panel Animations
 
-`Panel.animations` animates a panel while it is shown: a camera move between two viewport rects, layer keyframes, or both. Keyframes with the same `layerId` and `property` form a track; values are interpolated between neighbouring keyframes with the easing of the earlier one, and hold before the first and after the last keyframe.
+`Panel.animations` animates a panel while it is shown: a camera move between two viewport rects, layer keyframes, or both, on one timeline (`durationMs`, optional `loop`). Keyframes with the same `layerId` and `property` form a track; values are interpolated between neighbouring keyframes with the easing of the earlier one, and hold before the first and after the last keyframe.
 
 ```json
 {
@@ -321,6 +321,18 @@ Panels support layers, speech bubbles, hotspots, and media:
 | `transform.rotation` | Degrees clockwise around the layer's center |
 | `blur` | Blur radius in px at a panel width of 1024 px (scaled with the rendered panel) |
 | `brightness`, `contrast`, `saturate` | Multiplier (`1` = unchanged) |
+
+A **camera move** travels from `startViewportRect` to `endViewportRect` (the part of the panel the reader sees, normalized to the panel box) over `durationMs`, eased by `easing`. A missing rect is the whole panel, so an end rect alone is a push-in and a start rect alone a pull-back. Players fit the rect into the panel box with a uniform scale — the artwork is never stretched — and move everything anchored to the artwork (layers, hotspots, speech bubbles) together; the panel box clips the result.
+
+```json
+{
+  "animations": {
+    "endViewportRect": { "x": 0.3, "y": 0.2, "w": 0.4, "h": 0.4 },
+    "durationMs": 4000,
+    "easing": "ease-in-out"
+  }
+}
+```
 
 Players that honour a reduced-motion preference skip the motion and show the end state.
 

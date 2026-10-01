@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.6.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.7.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.6.0
+### Current Version: 1.7.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.0.0",
+    "version": "1.7.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -477,7 +477,7 @@ Seven transition types with optional easing:
 
 ### Extension Fields
 
-Custom properties prefixed with `x-` are allowed throughout:
+Custom properties prefixed with `x-` are allowed on the manifest root, on panels and on extras blocks:
 
 ```json
 {
@@ -488,7 +488,14 @@ Custom properties prefixed with `x-` are allowed throughout:
 
 ## Version History
 
-### 1.6.0 (Current)
+### 1.7.0 (Current)
+
+Relaxing, backward-compatible with 1.6.0 — existing manifests remain valid unchanged.
+
+- **`Graph.edges` may be empty**: `minItems` dropped from 1 to 0. `edges` is still required, but a single-panel chapter (or a chapter without branching) can now write `"edges": []`. The player follows the chapter's reading order when it has no edges.
+- **`x-` extension properties on panels and extras**: `^x-` properties are now allowed on `Panel` and on `ExtraBlock` (and therefore `ExtraCharacterSheet`), not only on the manifest root. Example: server-side paywall views mark stripped panels with `"x-locked": true`.
+
+### 1.6.0
 
 Additive, backward-compatible with 1.5.0 — existing manifests remain valid unchanged. Lets a purchase rule name **several unlocking products**, lets the manifest describe those products for the reader, and adds **layer keyframe animations**, **several alternative covers** and **ensemble character sheets**.
 
@@ -701,4 +708,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.6.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.7.0 | [panelwave.org](https://panelwave.org) | Made for creators

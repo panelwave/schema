@@ -190,6 +190,8 @@ Chapters use a graph structure where panels are nodes:
 }
 ```
 
+`entry` and every edge's `from` are panels of the chapter that holds the graph. An edge's `to` (like a hotspot's `goTo`) may name a panel of **another chapter** of the work — a chapter transition, or a jump from the last chapter into an endings chapter; the reader then continues in that chapter. A panel without outgoing edges ends its chapter, and reading continues with the next chapter's `entry`.
+
 #### Variables and Conditions
 
 Define variables with scope and persistence:
@@ -493,6 +495,7 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 Relaxing, backward-compatible with 1.6.0 — existing manifests remain valid unchanged.
 
 - **`Graph.edges` may be empty**: `minItems` dropped from 1 to 0. `edges` is still required, but a single-panel chapter (or a chapter without branching) can now write `"edges": []`. The player follows the chapter's reading order when it has no edges.
+- **Edges into another chapter (clarification)**: an edge's `to` and a hotspot `goTo`'s `to` may name a panel of any chapter of the work; `entry` and `from` stay within the chapter. Players continue in the target's chapter. Nothing changes structurally — earlier wording implied that `to` had to be in the same chapter.
 - **`x-` extension properties on panels and extras**: `^x-` properties are now allowed on `Panel` and on `ExtraBlock` (and therefore `ExtraCharacterSheet`), not only on the manifest root. Example: server-side paywall views mark stripped panels with `"x-locked": true`.
 
 ### 1.6.0

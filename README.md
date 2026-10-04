@@ -497,6 +497,10 @@ Relaxing, backward-compatible with 1.6.0 — existing manifests remain valid unc
 - **`Graph.edges` may be empty**: `minItems` dropped from 1 to 0. `edges` is still required, but a single-panel chapter (or a chapter without branching) can now write `"edges": []`. The player follows the chapter's reading order when it has no edges.
 - **Edges into another chapter (clarification)**: an edge's `to` and a hotspot `goTo`'s `to` may name a panel of any chapter of the work; `entry` and `from` stay within the chapter. Players continue in the target's chapter. Nothing changes structurally — earlier wording implied that `to` had to be in the same chapter.
 - **`x-` extension properties on panels and extras**: `^x-` properties are now allowed on `Panel` and on `ExtraBlock` (and therefore `ExtraCharacterSheet`), not only on the manifest root. Example: server-side paywall views mark stripped panels with `"x-locked": true`.
+- **`Edge.label`** (optional `LocalizedString`): the reader-facing text of a path — players show it on branch-chooser buttons. Before 1.7.0 editors had to hide choice labels in editor metadata (`Edge.mutations`).
+- **`Hotspot.display`** (optional, `auto` | `button` | `area`, default `auto`): `area` is an invisible click area over the artwork (the label is only its accessible name), `button` shows the label as a button, `auto` shows buttons when the panel's `goTo` hotspots lead to two or more panels (a choice) and areas otherwise.
+- **`BalloonConfig.textColor`** (optional CSS hex, default `#000000`; also on `BalloonConfigOverride`, so presets, characters and single balloons can set it): the lettering colour — e.g. amber on-screen text on a dark fill.
+- **Variable ids may contain underscores**: `VariableDefinition.id` now matches `^[a-zA-Z0-9][a-zA-Z0-9_]*(\.[a-zA-Z0-9_-]+)*$`, so snake_case names like `trust_jonas` are valid. Every id that was valid before stays valid.
 
 ### 1.6.0
 

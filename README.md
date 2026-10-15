@@ -496,6 +496,7 @@ Additive, backward-compatible with 1.7.0 — existing manifests remain valid unc
 
 - **Balloons grow with their text** — `BalloonConfig.maxWidth` / `maxHeight` are now defined as the balloon's **authored size** (the size it has when its text fits, and the floor a renderer never goes below). When the active language's text needs more room, a renderer **grows** the body — proportionally first (same aspect ratio, up to 2× per side), then in height — and keeps the tail tip on the speaker, so a longer German line still fits the balloon authored in English. Before 1.8.0 renderers drew exactly `maxWidth × maxHeight` and let longer text spill.
 - **`BalloonConfig.textFit`** / **`BalloonConfigOverride.textFit`** (optional, `"grow"` | `"fixed"`, default `grow`): opt a work, character, preset or single bubble out of growth (`fixed` = the pre-1.8 fixed box).
+- **`SequenceAudioTrack.span`** (optional, `"custom"` | `"page"` | `"chapter"` | `"work"`, default `custom`; added later within 1.8.0, additive): how long a timeline track lasts as authored. `page` / `chapter` tracks carry their resolved `startTime` / `duration` and `startPanelId` / `endPanelId`; a `work` track (music for the whole story) lives in the first chapter and **keeps playing across chapter boundaries** until `endPanelId` (or the last panel) instead of stopping at its chapter's end.
 
 ### 1.7.0
 

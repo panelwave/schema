@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.8.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.9.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.8.0
+### Current Version: 1.9.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.8.0",
+    "version": "1.9.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -490,7 +490,13 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 
 ## Version History
 
-### 1.8.0 (Current)
+### 1.9.0 (Current)
+
+Additive, backward-compatible with 1.8.0 — existing manifests remain valid unchanged.
+
+- `tracking.eventWhitelist`: added `paywallAction` — emitted by the player when the reader acts on a paywall gate (`purchase` / `subscribe` / `login` / `dismiss`, with the blocking rule, its scope and the chosen product). It is the click-side counterpart of `paywall_view` (the gate being shown), so a whitelist that lists both lets analytics measure paywall conversion; a whitelist without it keeps filtering the event client-side as before. The name is camelCase like the video events because it matches the event the player emits (the enum's older entries stay snake_case).
+
+### 1.8.0
 
 Additive, backward-compatible with 1.7.0 — existing manifests remain valid unchanged.
 
@@ -723,4 +729,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.8.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.9.0 | [panelwave.org](https://panelwave.org) | Made for creators

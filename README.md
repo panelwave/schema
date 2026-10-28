@@ -302,7 +302,7 @@ Since 1.10.0 a panel can carry **content widgets** next to its artwork: reader-f
 | `kind` | Shows | Key fields |
 |---|---|---|
 | `download` | A file card: type icon, name, size | `assetId` → catalog item of category `file`; `fileName` (LocalizedString, default = the variant's `fileName`), `description`, `showIcon`, `showSize` |
-| `audioPlayer` | Play/pause, waveform, position, click/drag to seek | `assetId` → `audio` item (its `waveform` and `durationMs`); `showWaveform`, `showTime`, `duckMusic`, `startAtMs`. Never autoplays — panel background audio stays `kind: "audio"` |
+| `audioPlayer` | Play/pause, waveform, position, click/drag to seek | `assetId` → `audio` item (its `waveform` and `durationMs`); `showWaveform`, `showTime`, `duckMusic`, `startAtMs`, `keepPlaying` (keep playing when the reader moves on; default: stops on leaving the panel). Never autoplays — panel background audio stays `kind: "audio"` |
 | `videoPlayer` | Poster or button that opens the video in a modal with play/pause, position and seeking | `assetId` → `video` item (its `poster`); `trigger` (`poster` \| `button`), `autoplayInModal`, `showDuration` |
 | `scrollText` | Longer text scrolling inside its box | `text` (LocalizedString), `format` (`plain` \| `markdown` — a safe subset, no raw HTML), `styleRef` / `style` |
 | `iframe` | An embedded external page | `src` (**https only**), `title` (required), `allow` (fullscreen, autoplay, encrypted-media, picture-in-picture, clipboard-write), `sandbox` (`default` \| `strict` \| `none`), `lazy`, `showOpenLink` |

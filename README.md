@@ -295,6 +295,17 @@ Panels support layers, speech bubbles, hotspots, and media:
 }
 ```
 
+#### Timed Speech Balloons
+
+Since 1.10.0 a speech bubble can wait for its line: **`showAtMs`** is the time in milliseconds on the panel's clock when the balloon appears (0, the default, means with the panel). On a panel with an `on-view` video layer the clock starts when the video starts playing and pauses while it is paused or buffering, so a two-person dialogue follows the clip; otherwise it starts when the panel is shown, like a panel animation. A balloon with a later time is hidden until then and fades in; once shown it stays, and entering the panel again restarts the clock. Reduced-motion and print renders show every balloon at once.
+
+```json
+"speechBubbles": [
+  { "id": "sb-right", "characterId": "mira", "text": { "en-US": "You came back." }, "shape": { "x": 0.58, "y": 0.08, "w": 0.32, "h": 0.18 } },
+  { "id": "sb-left", "characterId": "jonas", "text": { "en-US": "I never left." }, "shape": { "x": 0.08, "y": 0.12, "w": 0.3, "h": 0.16 }, "showAtMs": 2400 }
+]
+```
+
 #### Content Widget Layers
 
 Since 1.10.0 a panel can carry **content widgets** next to its artwork: reader-facing UI that the player draws with the work's theme (`ui.theme`), placed like any layer by `x`/`y`/`width`/`height` in the layer reference space (`width` and `height` are required for widgets). All five share `title` (LocalizedString), `appearance` (`card` | `plain`) and optional `themeOverrides` (`ThemeColors`); `visibleIf` applies.
@@ -536,6 +547,7 @@ Additive, backward-compatible with 1.9.0 — existing manifests remain valid unc
 - **`AssetCatalogItemAudio.waveform`** — 16–1024 normalised peak amplitudes (0..1) evenly spaced over `durationMs`, drawn by audio player widgets.
 - **`ui.theme`** (`UITheme`) — `mode`, `colors` (`ThemeColors`, 14 tokens; `backdrop` accepts `#rrggbbaa` via the new `ColorHexAlpha`), `fonts.ui` / `fonts.body` (`ThemeFont`), `shape` and `density`. It styles the widgets, the video modal, action modals, choice buttons, the branch chooser and toasts; missing colours derive from `ui.branding`.
 - **`tracking.eventWhitelist`** — `download`, `widgetPlay`, `widgetOpen`.
+- **`SpeechBubble.showAtMs`** — timed balloons: integer 0–120 000 ms on the panel's clock (default 0 = with the panel). The clock of a panel with an on-view video starts when the video starts playing and pauses with it; other panels start it when the panel is shown. Later balloons fade in at their time and stay; reduced motion and print show all balloons. Older players ignore the field and show every balloon at once.
 - `Layer` now states that consumers must skip layer kinds they do not know and render the rest.
 
 ### 1.9.0

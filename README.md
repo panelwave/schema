@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.9.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.10.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.9.0
+### Current Version: 1.10.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.9.0",
+    "version": "1.10.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -295,6 +295,31 @@ Panels support layers, speech bubbles, hotspots, and media:
 }
 ```
 
+#### Content Widget Layers
+
+Since 1.10.0 a panel can carry **content widgets** next to its artwork: reader-facing UI that the player draws with the work's theme (`ui.theme`), placed like any layer by `x`/`y`/`width`/`height` in the layer reference space (`width` and `height` are required for widgets). All five share `title` (LocalizedString), `appearance` (`card` | `plain`) and optional `themeOverrides` (`ThemeColors`); `visibleIf` applies.
+
+| `kind` | Shows | Key fields |
+|---|---|---|
+| `download` | A file card: type icon, name, size | `assetId` → catalog item of category `file`; `fileName` (LocalizedString, default = the variant's `fileName`), `description`, `showIcon`, `showSize` |
+| `audioPlayer` | Play/pause, waveform, position, click/drag to seek | `assetId` → `audio` item (its `waveform` and `durationMs`); `showWaveform`, `showTime`, `duckMusic`, `startAtMs`, `keepPlaying` (keep playing when the reader moves on; default: stops on leaving the panel). Never autoplays — panel background audio stays `kind: "audio"` |
+| `videoPlayer` | Poster or button that opens the video in a modal with play/pause, position and seeking | `assetId` → `video` item (its `poster`); `trigger` (`poster` \| `button`), `autoplayInModal`, `showDuration` |
+| `scrollText` | Longer text scrolling inside its box | `text` (LocalizedString), `format` (`plain` \| `markdown` — a safe subset, no raw HTML), `styleRef` / `style` |
+| `iframe` | An embedded external page | `src` (**https only**), `title` (required), `allow` (fullscreen, autoplay, encrypted-media, picture-in-picture, clipboard-write), `sandbox` (`default` \| `strict` \| `none`), `lazy`, `showOpenLink` |
+
+```json
+{
+  "kind": "download",
+  "id": "ly-worksheet",
+  "z": 11,
+  "x": 60, "y": 620, "width": 420, "height": 96,
+  "assetId": "file-worksheet",
+  "fileName": { "en-US": "Worksheet 3.pdf", "de-DE": "Arbeitsblatt 3.pdf" }
+}
+```
+
+The work-wide look lives in `ui.theme`: `mode` (`light` | `dark` | `auto`), `colors` (surface, onSurface, surfaceMuted, onSurfaceMuted, accent, onAccent, border, focus, track, progress, waveform, waveformProgress, link, backdrop), `fonts.ui` / `fonts.body` (`family` + `fallback`), `shape` (`radius`, `borderWidth`, `shadow`) and `density`. Missing colours derive from `ui.branding`, then from the player's defaults for `mode`. A complete example is sample 16 (`content_widgets`).
+
 #### Panel Animations
 
 `Panel.animations` animates a panel while it is shown: a camera move between two viewport rects, layer keyframes, or both, on one timeline (`durationMs`, optional `loop`). Keyframes with the same `layerId` and `property` form a track; values are interpolated between neighbouring keyframes with the easing of the earlier one, and hold before the first and after the last keyframe.
@@ -397,6 +422,18 @@ Register all assets with variants for different formats:
         "alt": { "en-US": "Dark city alley in the rain" }
       },
       {
+        "id": "file-worksheet",
+        "category": "file",
+        "variants": [
+          {
+            "src": "worksheet-3.pdf",
+            "mime": "application/pdf",
+            "sizeBytes": 482133,
+            "fileName": "Worksheet 3.pdf"
+          }
+        ]
+      },
+      {
         "id": "sfx-rain",
         "category": "audio",
         "role": "sfx",
@@ -417,7 +454,7 @@ Register all assets with variants for different formats:
 
 `src`, `poster.src`, character `images.*`, extras `url`/`thumbnail` and every other asset reference may be absolute or relative. Consumers resolve a **relative** reference in this order:
 
-1. `assets.base.<category>Base` for the asset's category (`imageBase`, `audioBase`, `videoBase`, `pluginsBase`; vector assets use `imageBase`),
+1. `assets.base.<category>Base` for the asset's category (`imageBase`, `audioBase`, `videoBase`, `pluginsBase`, `filesBase`; vector assets use `imageBase`),
 2. `assets.base.mediaBase`,
 3. the URL the manifest document itself was loaded from — the same rule a browser applies to relative links in an HTML page.
 
@@ -490,7 +527,18 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 
 ## Version History
 
-### 1.9.0 (Current)
+### 1.10.0 (Current)
+
+Additive, backward-compatible with 1.9.0 — existing manifests remain valid unchanged.
+
+- **Content widget layers** — five new `Layer` kinds, all with the shared `WidgetLayerCommon` fields (`title`, `appearance`, `themeOverrides`, `print`: `card` / `hide` in print renders) and required `width` / `height`: `download` (`DownloadLayer`: file card with icon, localized `fileName`, size, `description`), `audioPlayer` (`AudioPlayerLayer`: visible player with waveform and seeking, `duckMusic`; distinct from `kind: "audio"` background audio, which keeps autoplaying), `videoPlayer` (`VideoPlayerLayer`: poster or button opening a modal player, `trigger`, `autoplayInModal`), `scrollText` (`ScrollTextLayer`: localized `text`, `format` `plain` / safe-subset `markdown`, `styleRef` / `style`) and `iframe` (`IframeLayer`: https-only `src`, required `title`, `allow` allowlist, `sandbox` presets, `lazy`, `showOpenLink`).
+- **`file` asset category** — `AssetCatalogItemFile` with `FileVariant` (`src`, `mime`, `sizeBytes`, `fileName`, `sha256`, `locale`); `assets.base.filesBase`.
+- **`AssetCatalogItemAudio.waveform`** — 16–1024 normalised peak amplitudes (0..1) evenly spaced over `durationMs`, drawn by audio player widgets.
+- **`ui.theme`** (`UITheme`) — `mode`, `colors` (`ThemeColors`, 14 tokens; `backdrop` accepts `#rrggbbaa` via the new `ColorHexAlpha`), `fonts.ui` / `fonts.body` (`ThemeFont`), `shape` and `density`. It styles the widgets, the video modal, action modals, choice buttons, the branch chooser and toasts; missing colours derive from `ui.branding`.
+- **`tracking.eventWhitelist`** — `download`, `widgetPlay`, `widgetOpen`.
+- `Layer` now states that consumers must skip layer kinds they do not know and render the rest.
+
+### 1.9.0
 
 Additive, backward-compatible with 1.8.0 — existing manifests remain valid unchanged.
 
@@ -689,7 +737,7 @@ Single source for web, print (A4/US), and video (16:9) outputs with format-speci
 
 ### Educational Content
 
-Interactive training materials with decision scenarios, assessments, and detailed analytics on learner paths.
+Interactive training materials with decision scenarios, assessments, and detailed analytics on learner paths — with worksheets to download, audio and video to play on demand, longer background texts and embedded quizzes or maps (content widget layers, 1.10.0).
 
 ### Premium Content Distribution
 
@@ -729,4 +777,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.9.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.10.0 | [panelwave.org](https://panelwave.org) | Made for creators

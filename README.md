@@ -559,6 +559,7 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 Additive, backward-compatible with 1.10.0 — existing manifests remain valid unchanged.
 
 - **`ImageVariant.locale`** — per-language artwork: an image asset can list language versions of itself (a sign, a title card, lettering drawn into the image), each with its own width ladder if needed. Players narrow the variants to the reader's language (exact locale → same base language → variants without `locale` → `meta.default_locale` → all) before choosing by width or density. Older players ignore the field and pick among all variants, so the language-neutral variants should come first.
+- **Longer balloon tails** — `BalloonConfig.tail.length` (and the per-bubble override) now allows up to 2000 px instead of 500, so a balloon can point at a speaker across a wide panel. Renderers already drew any length; only validation changes.
 
 ### 1.10.0
 

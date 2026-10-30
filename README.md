@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.10.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.11.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.10.0
+### Current Version: 1.11.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.10.0",
+    "version": "1.11.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -156,6 +156,22 @@ All user-facing strings support the `LocalizedString` pattern:
 ```
 
 Locales follow BCP-47 format (`en-US`, `de-DE`, `ja-JP`, etc.).
+
+Artwork can be localized too. Since 1.11.0 an image variant may carry a `locale`: an image with a sign, a title card or lettering drawn into it lists one variant (or one width ladder) per language next to the language-neutral ones. Players narrow the variants to the reader's language first — exact locale, then the same base language, then the variants without `locale`, then `meta.default_locale` — and choose by width or density among those:
+
+```json
+{
+  "id": "img-floor-hello",
+  "category": "image",
+  "variants": [
+    { "src": "floor-hello.png", "w": 2048, "h": 1152 },
+    { "src": "floor-hallo.png", "w": 2048, "h": 1152, "locale": "de-DE" },
+    { "src": "floor-bonjour.png", "w": 2048, "h": 1152, "locale": "fr-FR" }
+  ]
+}
+```
+
+Audio and video variants have carried `locale` since 1.0 (voice-over, dubbed clips); `file` variants since 1.10.0.
 
 #### Graph-Based Flow
 
@@ -538,7 +554,13 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 
 ## Version History
 
-### 1.10.0 (Current)
+### 1.11.0 (Current)
+
+Additive, backward-compatible with 1.10.0 — existing manifests remain valid unchanged.
+
+- **`ImageVariant.locale`** — per-language artwork: an image asset can list language versions of itself (a sign, a title card, lettering drawn into the image), each with its own width ladder if needed. Players narrow the variants to the reader's language (exact locale → same base language → variants without `locale` → `meta.default_locale` → all) before choosing by width or density. Older players ignore the field and pick among all variants, so the language-neutral variants should come first.
+
+### 1.10.0
 
 Additive, backward-compatible with 1.9.0 — existing manifests remain valid unchanged.
 
@@ -789,4 +811,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.10.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.11.0 | [panelwave.org](https://panelwave.org) | Made for creators

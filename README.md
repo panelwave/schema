@@ -324,7 +324,7 @@ Since 1.10.0 a speech bubble can wait for its line: **`showAtMs`** is the time i
 
 #### Spoken Lines (Voices)
 
-A speech bubble can carry its spoken line: `audioAssetId` names an audio asset of the catalog (`role: "voiceover"`). A line recorded or generated per language lists one `AudioVariant` per locale on that one asset; players narrow the variants to the reader's language the way they narrow image variants (exact locale, then the same base language, then the variants without `locale`, then `meta.default_locale`) and pick a playable one. Since 1.12.0 players play the line when the balloon appears (`showAtMs` on the panel clock), one bubble after another in array order, while the reader's **Voices** toggle is on; its initial state is `settings.ui.voicesDefault` (default on) and `settings.ui.controls.showVoicesToggle` hides the control. Readers who prefer listening can turn the balloons off (the Speech toggle) and keep the voices.
+A speech bubble can carry its spoken line: `audioAssetId` names an audio asset of the catalog (`role: "voiceover"`). A line recorded or generated per language lists one `AudioVariant` per locale on that one asset; players narrow the variants to the reader's language the way they narrow image variants (exact locale, then the same base language, then the variants without `locale`, then `meta.default_locale`) and pick a playable one. Since 1.12.0 players play the line when the balloon appears (`showAtMs` on the panel clock), one bubble after another in array order, while the reader's **Voices** toggle is on; its initial state is `settings.ui.voicesDefault` (off by default — a work with spoken lines sets it on) and `settings.ui.controls.showVoicesToggle` hides the control. Readers who prefer listening can turn the balloons off (the Speech toggle) and keep the voices.
 
 ```json
 "assets": {
@@ -583,7 +583,7 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 Additive, backward-compatible with 1.11.0 — existing manifests remain valid unchanged.
 
 - **Spoken lines** — the convention for per-language voice on a speech bubble is spelled out: `SpeechBubble.audioAssetId` names one audio asset whose `AudioVariant`s carry a `locale` each; players narrow them to the reader's language like image variants and play the line when the balloon appears (`showAtMs`), one bubble after another. No new field on the bubble — `AudioVariant.locale` exists since 1.0.
-- **`settings.ui.voicesDefault`** — initial state of the reader's new Voices toggle (default on): spoken lines and voiceover tracks. The Speech toggle only hides the balloons, so a reader can listen without reading. **`settings.ui.controls.showVoicesToggle`** hides the control. Players before 1.12 ignore both and keep gating voiceover audio by the speech toggle.
+- **`settings.ui.voicesDefault`** — initial state of the reader's new Voices toggle (off by default; a work with spoken lines sets it on): spoken lines and voiceover tracks. The Speech toggle only hides the balloons, so a reader can listen without reading. **`settings.ui.controls.showVoicesToggle`** hides the control. Players before 1.12 ignore both and keep gating voiceover audio by the speech toggle.
 
 ### 1.11.0
 

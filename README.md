@@ -682,7 +682,7 @@ Additive, backward-compatible with 1.0.0 — existing manifests remain valid unc
 
 ### Official Repositories
 
-- **Player**: [github.com/panelwave/player](https://github.com/panelwave/player) — open-source Angular player, on npm as [`@panelwave/player`](https://www.npmjs.com/package/@panelwave/player) ([live demo](https://panelwave.github.io/player/))
+- **Player**: [github.com/panelwave/player](https://github.com/panelwave/player) — open-source Angular player, on npm as [`@panelwave/player`](https://www.npmjs.com/package/@panelwave/player) ([live demo](https://read.panelwave.org/peoplegraphics/47c9ebf3-6f56-4a4d-a75c-fe8c060df192))
 - **Types**: [`@panelwave/types`](https://www.npmjs.com/package/@panelwave/types) ([source](https://github.com/panelwave/packages/tree/master/packages/types)) — full TypeScript interfaces for type-safe development
 - **CLI**: [`@panelwave/cli`](https://www.npmjs.com/package/@panelwave/cli) ([source](https://github.com/panelwave/packages/tree/master/packages/cli)) — validate, bundle, diff, and upgrade manifests from the command line; bundles a copy of this schema
 - **Examples**: the player's demo manifests live in [panelwave/player](https://github.com/panelwave/player/tree/master/projects/demo/src/assets); a public samples repository is planned

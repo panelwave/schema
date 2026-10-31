@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.11.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.12.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.11.0
+### Current Version: 1.12.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.11.0",
+    "version": "1.12.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -171,7 +171,7 @@ Artwork can be localized too. Since 1.11.0 an image variant may carry a `locale`
 }
 ```
 
-Audio and video variants have carried `locale` since 1.0 (voice-over, dubbed clips); `file` variants since 1.10.0.
+Audio and video variants have carried `locale` since 1.0 (voice-over, dubbed clips; see [Spoken Lines](#spoken-lines-voices)); `file` variants since 1.10.0.
 
 #### Graph-Based Flow
 
@@ -319,6 +319,30 @@ Since 1.10.0 a speech bubble can wait for its line: **`showAtMs`** is the time i
 "speechBubbles": [
   { "id": "sb-right", "characterId": "mira", "text": { "en-US": "You came back." }, "shape": { "x": 0.58, "y": 0.08, "w": 0.32, "h": 0.18 } },
   { "id": "sb-left", "characterId": "jonas", "text": { "en-US": "I never left." }, "shape": { "x": 0.08, "y": 0.12, "w": 0.3, "h": 0.16 }, "showAtMs": 2400 }
+]
+```
+
+#### Spoken Lines (Voices)
+
+A speech bubble can carry its spoken line: `audioAssetId` names an audio asset of the catalog (`role: "voiceover"`). A line recorded or generated per language lists one `AudioVariant` per locale on that one asset; players narrow the variants to the reader's language the way they narrow image variants (exact locale, then the same base language, then the variants without `locale`, then `meta.default_locale`) and pick a playable one. Since 1.12.0 players play the line when the balloon appears (`showAtMs` on the panel clock), one bubble after another in array order, while the reader's **Voices** toggle is on; its initial state is `settings.ui.voicesDefault` (default on) and `settings.ui.controls.showVoicesToggle` hides the control. Readers who prefer listening can turn the balloons off (the Speech toggle) and keep the voices.
+
+```json
+"assets": {
+  "catalog": [
+    {
+      "id": "voice-sb-right",
+      "category": "audio",
+      "role": "voiceover",
+      "durationMs": 1800,
+      "variants": [
+        { "src": "audio/sb-right.en-US.mp3", "locale": "en-US" },
+        { "src": "audio/sb-right.de-DE.mp3", "locale": "de-DE" }
+      ]
+    }
+  ]
+},
+"speechBubbles": [
+  { "id": "sb-right", "characterId": "mira", "text": { "en-US": "You came back.", "de-DE": "Du bist zurück." }, "shape": { "x": 0.58, "y": 0.08, "w": 0.32, "h": 0.18 }, "audioAssetId": "voice-sb-right" }
 ]
 ```
 
@@ -554,7 +578,14 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 
 ## Version History
 
-### 1.11.0 (Current)
+### 1.12.0 (Current)
+
+Additive, backward-compatible with 1.11.0 — existing manifests remain valid unchanged.
+
+- **Spoken lines** — the convention for per-language voice on a speech bubble is spelled out: `SpeechBubble.audioAssetId` names one audio asset whose `AudioVariant`s carry a `locale` each; players narrow them to the reader's language like image variants and play the line when the balloon appears (`showAtMs`), one bubble after another. No new field on the bubble — `AudioVariant.locale` exists since 1.0.
+- **`settings.ui.voicesDefault`** — initial state of the reader's new Voices toggle (default on): spoken lines and voiceover tracks. The Speech toggle only hides the balloons, so a reader can listen without reading. **`settings.ui.controls.showVoicesToggle`** hides the control. Players before 1.12 ignore both and keep gating voiceover audio by the speech toggle.
+
+### 1.11.0
 
 Additive, backward-compatible with 1.10.0 — existing manifests remain valid unchanged.
 
@@ -812,4 +843,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.11.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.12.0 | [panelwave.org](https://panelwave.org) | Made for creators

@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.12.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.13.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.12.0
+### Current Version: 1.13.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.12.0",
+    "version": "1.13.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -578,7 +578,13 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 
 ## Version History
 
-### 1.12.0 (Current)
+### 1.13.0 (Current)
+
+Additive and relaxing, backward-compatible with 1.12.0 — existing manifests remain valid unchanged.
+
+- **Framed page placements** — a page placement's `vx`/`vy`/`vw`/`vh` quartet is the **frame**: the window of the panel's image box (`x`/`y`/`w`/`h`, which keeps the artwork's aspect ratio) that the page shows, at `(x + vx·w, y + vy·h, vw·w, vh·h)`. Players crop to the frame on **every** screen size (player 1.5–2.0 cropped on phones only) and the CMS editor shows the frame, so an author can enlarge and move the artwork behind a fixed frame, per format. To allow that near the page edge the image box may now leave the page: `x`/`y` down to **−9** (was 0) and `w`/`h` up to **10** (was 2). The frame itself must stay on the page — not expressible in JSON Schema; the CLI's `validate` and the CMS check it. No new field.
+
+### 1.12.0
 
 Additive, backward-compatible with 1.11.0 — existing manifests remain valid unchanged.
 
@@ -843,4 +849,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.12.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.13.0 | [panelwave.org](https://panelwave.org) | Made for creators

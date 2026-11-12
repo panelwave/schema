@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.13.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.14.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.13.0
+### Current Version: 1.14.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.13.0",
+    "version": "1.14.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -578,7 +578,14 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 
 ## Version History
 
-### 1.13.0 (Current)
+### 1.14.0 (Current)
+
+Additive and relaxing, backward-compatible with 1.13.0 — existing manifests remain valid unchanged.
+
+- **Panel borders** — new `$defs/PanelBorderStyle` `{ color, thickness, style, radius }`. `settings.typography.panel_border_style` now refers to it, and the new **`Panel.border`** overrides the work's style field by field (fields left out inherit; `thickness: 0` or `style: "none"` = no border for that panel). Styles gain **`double`**, **`rough`** (hand-inked, wobbly) and **`wavy`** (dream/cloud outline); the new **`radius`** rounds the corners of every style. `thickness` relaxes from integer to number (0–10).
+- **Players now draw the border** in page, panel and canvas view and in print. Lengths are px of the page's output-format frame (A4 portrait 794×1123, …) and scale with the page; the line lies inside the frame and above the artwork and balloons; a radius, `rough` and `wavy` clip the artwork to the outline. A work without a `panel_border_style` gets the format default **#000000, 2, solid, radius 0** — players before 1.14 drew no configured border at all.
+
+### 1.13.0
 
 Additive and relaxing, backward-compatible with 1.12.0 — existing manifests remain valid unchanged.
 
@@ -849,4 +856,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.13.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.14.0 | [panelwave.org](https://panelwave.org) | Made for creators

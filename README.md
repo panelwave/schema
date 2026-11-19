@@ -2,7 +2,7 @@
 
 **Official JSON Schema definitions for the PanelWave dynamic graphic novel format.**
 
-[![Schema Version](https://img.shields.io/badge/schema-1.14.0-blue.svg)](./1.0/panelwave.schema.json)
+[![Schema Version](https://img.shields.io/badge/schema-1.15.0-blue.svg)](./1.0/panelwave.schema.json)
 [![JSON Schema](https://img.shields.io/badge/json--schema-2020--12-green.svg)](https://json-schema.org/draft/2020-12/schema)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ PanelWave enables creators to build modern graphic novels with:
 
 ## Schema Files
 
-### Current Version: 1.14.0
+### Current Version: 1.15.0
 
 - **Location**: [`1.0/panelwave.schema.json`](./1.0/panelwave.schema.json) (minor versions are additive and ship in-place within the `1.0/` major-version folder; see [Schema Evolution](#schema-evolution))
 - **Schema ID**: `https://panelwave.org/schema/1.0/panelwave.schema.json`
@@ -41,7 +41,7 @@ A PanelWave manifest requires three top-level sections:
 ```json
 {
   "panelwave": {
-    "version": "1.14.0",
+    "version": "1.15.0",
     "schema": "https://panelwave.org/schema/1.0/panelwave.schema.json"
   },
   "meta": {
@@ -127,6 +127,7 @@ panelwave validate ./my-comic/panelwave.json --schema 1.0.0
 | `paywall` | Object |  | Entitlement and paywall rules |
 | `tracking` | Object |  | Analytics and event tracking configuration |
 | `ui` | Object |  | Branding and UI customization |
+| `distribution` | Object |  | Where the work lives and how channels may present it: canonical address, the author's terms, checkout, editions (since 1.15) |
 
 ### Key Definitions
 
@@ -578,7 +579,31 @@ Custom properties prefixed with `x-` are allowed on the manifest root, on panels
 
 ## Version History
 
-### 1.14.0 (Current)
+### 1.15.0 (Current)
+
+Additive, backward-compatible with 1.14.0 — existing manifests remain valid unchanged.
+
+- **Distribution metadata in `meta`** (all optional): `subtitle` and `synopsis` (LocalizedString; `description` stays the long text), `format`, `publication_type`, `release_kind`, `genres[] { code, primary? }` (≤ 5, codes of the PanelWave vocabulary, which follows roadbeat's comic genre codes), `keywords { locale: string[] }` (≤ 7 per language), `rating { code: E|T|M|A, min_age?, regional[]?, warnings[]? }` (`age_rating` stays and carries the same code), `series_info { id, title, number?, display?, volume?, url? }` (the `series` string stays), `identifiers[] { system, value, edition? }`, `publisher_info`, `license_info` (the strings stay), `original_language`, `translation`, `ai_disclosure` and `facts`. `creators[]` gains `role_code` (craft role code; `role` stays the display text).
+- **`$defs/AiDisclosure`** — per craft area (`script`, `lineArt`, `colouring`, `lettering`, `cover`, `translation`, `voices`, `music`, `animation`) one level: `none`, `assisted` (human-made, AI refined), `generated_edited` (AI first version, substantially reworked) or `generated`; `declared: false` means not answered yet; an optional public `statement`.
+- **`$defs/WorkFacts`** (`meta.facts`) — computed when a release is frozen, never typed: chapter, panel and page counts, reading minutes, `features[]` (`branching`, `variables`, `hotspots`, `audio`, `voice`, `video`, `animation`, `widgets`), `content_hash`.
+- **New top-level `distribution`** — `canonical` (the interactive edition's home), `listing { id, channel }` in channel-scoped manifests, `terms` (`$defs/DistributionTerms`: who may list and embed the work, purchase rules with `max_channel_fee_bps`, preview, attribution, contact), `checkout`, `unlock`, `editions[] { locale, url }` and `integrity` (signed packages). Allows `^x-` properties for channel-specific data. Players ignore it until they use it.
+
+```json
+"meta": {
+  "synopsis": { "en-US": "A night-shift nurse finds a door that was not there yesterday." },
+  "genres": [{ "code": "mystery", "primary": true }, { "code": "supernatural" }],
+  "keywords": { "en-US": ["hospital", "night shift", "interactive comic"] },
+  "rating": { "code": "T", "min_age": 12, "warnings": ["death"] },
+  "series_info": { "id": "night-shift", "title": { "en-US": "Night Shift" }, "number": 3 },
+  "ai_disclosure": { "declared": true, "areas": { "translation": "generated_edited" } }
+},
+"distribution": {
+  "canonical": "https://read.panelwave.org/team/night-shift-3",
+  "terms": { "listing": "listed_channels", "embedding": "anywhere", "purchase": { "max_channel_fee_bps": 1500 } }
+}
+```
+
+### 1.14.0
 
 Additive and relaxing, backward-compatible with 1.13.0 — existing manifests remain valid unchanged.
 
@@ -856,4 +881,4 @@ This schema does not dictate licensing for:
 ---
 
 **PanelWave Schema** - Open format for dynamic graphic novels  
-Version 1.14.0 | [panelwave.org](https://panelwave.org) | Made for creators
+Version 1.15.0 | [panelwave.org](https://panelwave.org) | Made for creators
